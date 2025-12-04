@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sacred Wisdom Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0a0e1a;
+            --secondary-bg: #1a1f35;
+            --card-bg: rgba(26, 31, 53, 0.8);
+            --accent-gold: #d4af37;
+            --accent-purple: #8b7ab8;
+            --text-primary: #e8e4d9;
+            --text-secondary: #b8b4a9;
+            --gradient-1: linear-gradient(135deg, #1a1f35 0%, #0a0e1a 100%);
+            --gradient-2: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(139, 122, 184, 0.1) 100%);
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 30px rgba(212, 175, 55, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 122, 184, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: var(--text-secondary);
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                grid-template-columns: 350px 1fr;
+            }
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .teacher-select-container {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            background: var(--secondary-bg);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'Crimson Pro', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            border-color: var(--accent-gold);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .teacher-info {
+            padding: 15px;
+            background: rgba(139, 122, 184, 0.1);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            border-left: 3px solid var(--accent-purple);
+        }
+
+        .sample-prompts {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .prompt-btn {
+            padding: 12px 16px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .prompt-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: var(--accent-gold);
+            transform: translateX(5px);
+        }
+
+        .main-area {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .input-area {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            background: var(--secondary-bg);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'Crimson Pro', serif;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn {
+            padding: 15px 35px;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #b8941f 100%);
+            border: none;
+            border-radius: 10px;
+            color: var(--primary-bg);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .response-area {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 122, 184, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow-soft);
+            min-height: 300px;
+            display: none;
+        }
+
+        .response-area.active {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .teacher-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            color: var(--accent-purple);
+        }
+
+        .favorite-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--accent-gold);
+            border-radius: 6px;
+            color: var(--accent-gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .favorite-btn:hover {
+            background: var(--accent-gold);
+            color: var(--primary-bg);
+        }
+
+        .favorite-btn.favorited {
+            background: var(--accent-gold);
+            color: var(--primary-bg);
+        }
+
+        .response-text {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+        }
+
+        .loader {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(212, 175, 55, 0.2);
+            border-top-color: var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab:hover {
+            color: var(--accent-gold);
+        }
+
+        .tab.active {
+            color: var(--accent-gold);
+            border-bottom-color: var(--accent-gold);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .history-item, .favorite-item {
+            padding: 20px;
+            background: rgba(26, 31, 53, 0.5);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--accent-purple);
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover, .favorite-item:hover {
+            background: rgba(26, 31, 53, 0.8);
+            border-left-color: var(--accent-gold);
+        }
+
+        .history-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .history-question {
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .history-response {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .meditation-tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .tool-card {
+            padding: 20px;
+            background: rgba(139, 122, 184, 0.1);
+            border: 1px solid rgba(139, 122, 184, 0.2);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            background: rgba(139, 122, 184, 0.2);
+            border-color: var(--accent-purple);
+            transform: translateY(-3px);
+        }
+
+        .tool-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .tool-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--accent-purple);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background: var(--secondary-bg);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: none;
+            border: none;
+        }
+
+        .close-modal:hover {
+            color: var(--accent-gold);
+        }
+
+        .timer-display {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            text-align: center;
+            color: var(--accent-gold);
+            margin: 30px 0;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 30px 15px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .tab {
+                white-space: nowrap;
+            }
+
+            .meditation-tools {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sacred Wisdom Portal</h1>
+            <p class="subtitle">Seek Guidance from the Masters</p>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="card">
+                    <h2 class="card-title">Choose Your Guide</h2>
+                    <div class="teacher-select-container">
+                        <label for="teacher-select">Select a Spiritual Teacher:</label>
+                        <select id="teacher-select">
+                            {% for key, teacher in teachers.items() %}
+                            <option value="{{ key }}">{{ teacher.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div id="teacher-info" class="teacher-info"></div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Sample Questions</h2>
+                    <div class="sample-prompts">
+                        {% for prompt in sample_prompts %}
+                        <button class="prompt-btn" onclick="usePrompt('{{ prompt }}')">{{ prompt }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Spiritual Tools</h2>
+                    <div class="meditation-tools">
+                        <div class="tool-card" onclick="openTimer()">
+                            <div class="tool-icon">⏱️</div>
+                            <div class="tool-name">Meditation Timer</div>
+                        </div>
+                        <div class="tool-card" onclick="openBreathwork()">
+                            <div class="tool-icon">🌬️</div>
+                            <div class="tool-name">Breathwork</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="main-area">
+                <div class="card input-area">
+                    <label for="question-input">Your Question:</label>
+                    <textarea id="question-input" placeholder="Ask your question here..."></textarea>
+                    <button id="ask-btn" class="btn" onclick="askQuestion()">Receive Wisdom</button>
+                </div>
+
+                <div id="response-area" class="response-area">
+                    <div class="response-header">
+                        <span id="response-teacher" class="teacher-name"></span>
+                        <button id="favorite-btn" class="favorite-btn" onclick="toggleFavorite()">★ Save</button>
+                    </div>
+                    <div id="response-text" class="response-text"></div>
+                </div>
+
+                <div class="card">
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab('history')">Conversation History</button>
+                        <button class="tab" onclick="switchTab('favorites')">Saved Wisdom</button>
+                    </div>
+                    <div id="history-tab" class="tab-content active">
+                        <div id="history-list"></div>
+                    </div>
+                    <div id="favorites-tab" class="tab-content">
+                        <div id="favorites-list"></div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Meditation Timer Modal -->
+    <div id="timer-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeTimer()">&times;</button>
+            <h2 class="card-title" style="text-align: center;">Meditation Timer</h2>
+            <div id="timer-display" class="timer-display">05:00</div>
+            <div class="timer-controls">
+                <button class="btn" onclick="setTimer(5)">5 min</button>
+                <button class="btn" onclick="setTimer(10)">10 min</button>
+                <button class="btn" onclick="setTimer(20)">20 min</button>
+                <button class="btn" onclick="setTimer(30)">30 min</button>
+            </div>
+            <div class="timer-controls" style="margin-top: 20px;">
+                <button id="timer-start" class="btn" onclick="startTimer()">Start</button>
+                <button id="timer-pause" class="btn" onclick="pauseTimer()" style="display: none;">Pause</button>
+                <button class="btn" onclick="resetTimer()">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Breathwork Modal -->
+    <div id="breathwork-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeBreathwork()">&times;</button>
+            <h2 class="card-title" style="text-align: center;">Box Breathing</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 30px;">
+                Follow the rhythm: Inhale → Hold → Exhale → Hold
+            </p>
+            <div id="breathwork-display" class="timer-display" style="font-size: 2.5rem;">Inhale</div>
+            <div class="timer-controls">
+                <button id="breathwork-start" class="btn" onclick="startBreathwork()">Start</button>
+                <button id="breathwork-stop" class="btn" onclick="stopBreathwork()" style="display: none;">Stop</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const teachers = {{ teachers | tojson }};
+        let currentResponseId = null;
+        let timerInterval = null;
+        let timerSeconds = 300;
+        let timerRunning = false;
+        let breathworkInterval = null;
+
+        // Update teacher info on selection
+        document.getElementById('teacher-select').addEventListener('change', function() {
+            const teacher = teachers[this.value];
+            document.getElementById('teacher-info').textContent = teacher.description;
+        });
+
+        // Initialize first teacher info
+        document.getElementById('teacher-select').dispatchEvent(new Event('change'));
+
+        function usePrompt(prompt) {
+            document.getElementById('question-input').value = prompt;
+        }
+
+        async function askQuestion() {
+            const question = document.getElementById('question-input').value.trim();
+            const teacher = document.getElementById('teacher-select').value;
+
+            if (!question) {
+                alert('Please enter a question');
+                return;
+            }
+
+            const askBtn = document.getElementById('ask-btn');
+            const responseArea = document.getElementById('response-area');
+            const responseText = document.getElementById('response-text');
+            const responseTeacher = document.getElementById('response-teacher');
+
+            askBtn.disabled = true;
+            askBtn.textContent = 'Channeling Wisdom...';
+            responseArea.classList.add('active');
+            responseText.innerHTML = '<div class="loader"><div class="spinner"></div><p>Receiving guidance...</p></div>';
+
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question, teacher })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    responseTeacher.textContent = data.teacher;
+                    responseText.textContent = data.response;
+                    currentResponseId = data.id;
+                    document.getElementById('favorite-btn').classList.remove('favorited');
+                    loadHistory();
+                } else {
+                    responseText.innerHTML = `<p style="color: #ff6b6b;">Error: ${data.error}</p>`;
+                }
+            } catch (error) {
+                responseText.innerHTML = `<p style="color: #ff6b6b;">Error: ${error.message}</p>`;
+            } finally {
+                askBtn.disabled = false;
+                askBtn.textContent = 'Receive Wisdom';
+            }
+        }
+
+        async function toggleFavorite() {
+            if (!currentResponseId) return;
+
+            const btn = document.getElementById('favorite-btn');
+            const isFavorited = btn.classList.contains('favorited');
+
+            try {
+                const endpoint = isFavorited ? '/favorite/remove' : '/favorite/add';
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: currentResponseId })
+                });
+
+                if (response.ok) {
+                    btn.classList.toggle('favorited');
+                    btn.textContent = isFavorited ? '★ Save' : '★ Saved';
+                    loadFavorites();
+                }
+            } catch (error) {
+                console.error('Error toggling favorite:', error);
+            }
+        }
+
+        async function loadHistory() {
+            try {
+                const response = await fetch('/history');
+                const history = await response.json();
+                const historyList = document.getElementById('history-list');
+
+                if (history.length === 0) {
+                    historyList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📜</div><p>No conversations yet</p></div>';
+                    return;
+                }
+
+                historyList.innerHTML = history.map(item => `
+                    <div class="history-item">
+                        <div class="history-meta">
+                            <span>${item.teacher}</span>
+                            <span>${new Date(item.timestamp).toLocaleDateString()}</span>
+                        </div>
+                        <div class="history-question">${item.question}</div>
+                        <div class="history-response">${item.response.substring(0, 200)}${item.response.length > 200 ? '...' : ''}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading history:', error);
+            }
+        }
+
+        async function loadFavorites() {
+            try {
+                const response = await fetch('/favorites');
+                const favorites = await response.json();
+                const favoritesList = document.getElementById('favorites-list');
+
+                if (favorites.length === 0) {
+                    favoritesList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">⭐</div><p>No saved wisdom yet</p></div>';
+                    return;
+                }
+
+                favoritesList.innerHTML = favorites.map(item => `
+                    <div class="favorite-item">
+                        <div class="history-meta">
+                            <span>${item.teacher}</span>
+                            <span>${new Date(item.timestamp).toLocaleDateString()}</span>
+                        </div>
+                        <div class="history-question">${item.question}</div>
+                        <div class="history-response">${item.response}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading favorites:', error);
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+
+            if (tabName === 'favorites') {
+                loadFavorites();
+            }
+        }
+
+        // Meditation Timer Functions
+        function openTimer() {
+            document.getElementById('timer-modal').classList.add('active');
+        }
+
+        function closeTimer() {
+            document.getElementById('timer-modal').classList.remove('active');
+            if (timerRunning) {
+                pauseTimer();
+            }
+        }
+
+        function setTimer(minutes) {
+            timerSeconds = minutes * 60;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            document.getElementById('timer-display').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (timerRunning) return;
+            
+            timerRunning = true;
+            document.getElementById('timer-start').style.display = 'none';
+            document.getElementById('timer-pause').style.display = 'inline-block';
+            
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+                
+                if (timerSeconds <= 0) {
+                    pauseTimer();
+                    alert('Meditation complete! 🙏');
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            timerRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('timer-start').style.display = 'inline-block';
+            document.getElementById('timer-pause').style.display = 'none';
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timerSeconds = 300;
+            updateTimerDisplay();
+        }
+
+        // Breathwork Functions
+        function openBreathwork() {
+            document.getElementById('breathwork-modal').classList.add('active');
+        }
+
+        function closeBreathwork() {
+            document.getElementById('breathwork-modal').classList.remove('active');
+            stopBreathwork();
+        }
+
+        function startBreathwork() {
+            document.getElementById('breathwork-start').style.display = 'none';
+            document.getElementById('breathwork-stop').style.display = 'inline-block';
+            
+            const phases = ['Inhale', 'Hold', 'Exhale', 'Hold'];
+            let phaseIndex = 0;
+            
+            document.getElementById('breathwork-display').textContent = phases[0];
+            
+            breathworkInterval = setInterval(() => {
+                phaseIndex = (phaseIndex + 1) % phases.length;
+                document.getElementById('breathwork-display').textContent = phases[phaseIndex];
+            }, 4000);
+        }
+
+        function stopBreathwork() {
+            clearInterval(breathworkInterval);
+            document.getElementById('breathwork-start').style.display = 'inline-block';
+            document.getElementById('breathwork-stop').style.display = 'none';
+            document.getElementById('breathwork-display').textContent = 'Inhale';
+        }
+
+        // Load initial history
+        loadHistory();
+
+        // Allow Enter key to submit
+        document.getElementById('question-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                askQuestion();
+            }
+        });
+    </script>
+</body>
+</html>
