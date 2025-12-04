@@ -1,0 +1,256 @@
+═══════════════════════════════════════════════════════════════
+  SACRED WISDOM PORTAL - QUICK START GUIDE
+═══════════════════════════════════════════════════════════════
+
+🎯 YOUR NEW APP INCLUDES:
+
+✅ 10 Spiritual Teachers (Eckhart Tolle, Alan Watts, Carl Jung, Ram Dass, 
+   Marianne Williamson, Thich Nhat Hanh, Rumi, Gnostic Jesus, 
+   Paramahansa Yogananda, Adyashanti)
+
+✅ Beautiful responsive design (works on phones & computers)
+
+✅ Conversation history & favorites
+
+✅ Meditation timer & breathwork tool
+
+✅ 3 sample prompts to get started
+
+
+═══════════════════════════════════════════════════════════════
+  OPTION 1: RUN LOCALLY (EASIEST FOR TESTING)
+═══════════════════════════════════════════════════════════════
+
+1. Install Python packages:
+   
+   pip install -r requirements.txt
+
+2. Create .env file with your API key:
+   
+   ANTHROPIC_API_KEY=your_key_here
+
+3. Run the app:
+   
+   python spiritual_app.py
+
+4. Open browser to:
+   
+   http://localhost:5000
+
+
+═══════════════════════════════════════════════════════════════
+  OPTION 2: DEPLOY TO RENDER (FREE WEB HOSTING)
+═══════════════════════════════════════════════════════════════
+
+🌟 RECOMMENDED - Free hosting with custom domain!
+
+STEP 1: Push to GitHub
+───────────────────────────────────────────────────────────────
+git init
+git add .
+git commit -m "Sacred Wisdom Portal"
+
+# Create repository on GitHub, then:
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+git branch -M main
+git push -u origin main
+
+
+STEP 2: Deploy to Render
+───────────────────────────────────────────────────────────────
+1. Go to https://render.com (sign up - it's free!)
+
+2. Click "New +" → "Web Service"
+
+3. Connect your GitHub repository
+
+4. Configure:
+   • Name: sacred-wisdom-portal
+   • Environment: Python 3
+   • Build Command: pip install -r requirements.txt
+   • Start Command: gunicorn spiritual_app:app
+   • Plan: Free
+
+5. Add Environment Variable:
+   • Key: ANTHROPIC_API_KEY
+   • Value: your_actual_api_key
+
+6. Click "Create Web Service"
+
+7. Wait 2-3 minutes... DONE! 🎉
+
+Your app will be live at:
+https://sacred-wisdom-portal.onrender.com
+
+
+═══════════════════════════════════════════════════════════════
+  OPTION 3: DEPLOY TO HEROKU (ALSO FREE)
+═══════════════════════════════════════════════════════════════
+
+1. Install Heroku CLI from: https://devcenter.heroku.com/articles/heroku-cli
+
+2. Login:
+   heroku login
+
+3. Create app:
+   heroku create sacred-wisdom-portal
+
+4. Set environment variable:
+   heroku config:set ANTHROPIC_API_KEY=your_key_here
+
+5. Deploy:
+   git push heroku main
+
+6. Open:
+   heroku open
+
+
+═══════════════════════════════════════════════════════════════
+  HOW TO USE YOUR APP
+═══════════════════════════════════════════════════════════════
+
+1. SELECT A TEACHER from the dropdown menu
+
+2. TYPE YOUR QUESTION or click a sample prompt
+
+3. CLICK "Receive Wisdom"
+
+4. SAVE FAVORITES by clicking the star button
+
+5. VIEW HISTORY in the tabs below
+
+6. USE MEDITATION TOOLS:
+   • Click "Meditation Timer" for timed sessions
+   • Click "Breathwork" for box breathing guide
+
+
+═══════════════════════════════════════════════════════════════
+  SAMPLE QUESTIONS TO TRY
+═══════════════════════════════════════════════════════════════
+
+• How can I find peace in difficult times?
+• What is the nature of my true self?
+• How do I let go of past suffering?
+• How can I practice mindfulness in daily life?
+• What is the path to spiritual awakening?
+• How do I work with my shadow?
+• What does it mean to love unconditionally?
+• How can I experience the present moment more fully?
+
+
+═══════════════════════════════════════════════════════════════
+  COSTS & API USAGE
+═══════════════════════════════════════════════════════════════
+
+Each conversation costs approximately $0.02
+
+Anthropic gives you $5 free credit = ~250 questions
+
+After that, you can add more credits at:
+https://console.anthropic.com/
+
+
+═══════════════════════════════════════════════════════════════
+  TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════
+
+❌ "API key not found"
+   → Make sure .env file exists with your key
+   → Or set environment variable on your hosting platform
+
+❌ "Module not found"
+   → Run: pip install -r requirements.txt
+
+❌ Port already in use
+   → Change port in spiritual_app.py to 5001 or 8080
+
+❌ App won't start on Render
+   → Check Environment Variables tab
+   → Make sure ANTHROPIC_API_KEY is set
+   → Check logs for specific error
+
+
+═══════════════════════════════════════════════════════════════
+  CUSTOMIZATION IDEAS
+═══════════════════════════════════════════════════════════════
+
+Want to customize? Easy!
+
+ADD MORE TEACHERS:
+• Edit SPIRITUAL_TEACHERS in spiritual_app.py
+• Add new teacher with name, description, and system prompt
+
+CHANGE COLORS:
+• Edit CSS variables in templates/index.html
+• Change --accent-gold and --accent-purple
+
+ADD MORE SAMPLE PROMPTS:
+• Edit SAMPLE_PROMPTS list in spiritual_app.py
+
+
+═══════════════════════════════════════════════════════════════
+  FILES IN YOUR PROJECT
+═══════════════════════════════════════════════════════════════
+
+spiritual_app.py      → Main Flask app (backend)
+templates/index.html  → Frontend (HTML/CSS/JavaScript)
+requirements.txt      → Python dependencies
+.env.example         → Template for environment variables
+.env                 → Your actual API key (DON'T COMMIT!)
+Procfile             → Tells hosting services how to run app
+.gitignore           → Protects sensitive files
+README.md            → Full documentation
+QUICK_START.txt      → This guide!
+
+
+═══════════════════════════════════════════════════════════════
+  WHAT MAKES THIS APP SPECIAL
+═══════════════════════════════════════════════════════════════
+
+✨ Beautiful Design
+   • Elegant spiritual aesthetic
+   • Gold and purple accents
+   • Smooth animations
+   • Dark theme for meditation
+
+📱 Fully Responsive
+   • Perfect on phones
+   • Great on tablets
+   • Beautiful on desktop
+
+🧘 Spiritual Tools
+   • Meditation timer
+   • Breathwork guide
+   • Conversation history
+   • Save favorites
+
+🎓 10 Master Teachers
+   • Each with unique wisdom
+   • Authentic teaching styles
+   • Deep spiritual knowledge
+
+
+═══════════════════════════════════════════════════════════════
+  NEXT STEPS
+═══════════════════════════════════════════════════════════════
+
+1. Choose deployment method (Render recommended)
+2. Get your Anthropic API key from console.anthropic.com
+3. Deploy your app
+4. Share with friends on their spiritual journey!
+
+May this tool serve you and others on the path to awakening.
+
+🙏 Namaste ✨
+
+
+═══════════════════════════════════════════════════════════════
+  SUPPORT & RESOURCES
+═══════════════════════════════════════════════════════════════
+
+Anthropic API Docs: https://docs.anthropic.com/
+Flask Documentation: https://flask.palletsprojects.com/
+Render Help: https://render.com/docs
+Heroku Help: https://devcenter.heroku.com/
+
+Need help? Check README.md for detailed troubleshooting!

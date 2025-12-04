@@ -1,0 +1,195 @@
+﻿═══════════════════════════════════════════════════════════════
+  SACRED WISDOM PORTAL - DEPLOYMENT CHECKLIST
+═══════════════════════════════════════════════════════════════
+
+Follow this checklist to deploy your app in 15 minutes!
+
+═══════════════════════════════════════════════════════════════
+  ☐ PRE-DEPLOYMENT (5 minutes)
+═══════════════════════════════════════════════════════════════
+
+☐ Download Sacred_Wisdom_Portal.zip (or individual files)
+
+☐ Unzip to a folder on your computer
+
+☐ Get Anthropic API Key:
+   • Go to: https://console.anthropic.com/
+   • Sign up (free $5 credit)
+   • Copy your API key
+   • Keep it safe!
+
+☐ Test locally (optional but recommended):
+   • Open terminal/command prompt
+   • Navigate to your folder
+   • Run: pip install -r requirements.txt
+   • Create .env file with: ANTHROPIC_API_KEY=your_key
+   • Run: python spiritual_app.py
+   • Open: http://localhost:5000
+   • Test asking a question
+
+
+═══════════════════════════════════════════════════════════════
+  ☐ DEPLOY TO RENDER (10 minutes)
+═══════════════════════════════════════════════════════════════
+
+☐ STEP 1: Create GitHub Repository
+   • Go to: https://github.com/new
+   • Name: sacred-wisdom-portal
+   • Description: AI-powered spiritual guidance web app
+   • Choose: Public or Private
+   • Click: Create repository
+
+☐ STEP 2: Push Your Code to GitHub
+   • Open terminal in your project folder
+   • Run these commands:
+   
+     git init
+     git add .
+     git commit -m "Initial commit - Sacred Wisdom Portal"
+     git branch -M main
+     git remote add origin https://github.com/ lucas3oss-cpu/sacred-wisdom-portal.git
+     git push -u origin main
+
+☐ STEP 3: Sign Up for Render
+   • Go to: https://render.com
+   • Click: Get Started for Free
+   • Sign up with GitHub
+   • Authorize Render
+
+☐ STEP 4: Create Web Service
+   • Click: New + (top right)
+   • Select: Web Service
+   • Connect repository: sacred-wisdom-portal
+   • Click: Connect
+
+☐ STEP 5: Configure Service
+   • Name: sacred-wisdom-portal
+   • Region: Choose closest to you
+   • Branch: main
+   • Root Directory: (leave blank)
+   • Environment: Python 3
+   • Build Command: pip install -r requirements.txt
+   • Start Command: gunicorn spiritual_app:app
+   • Instance Type: Free
+
+☐ STEP 6: Add Environment Variable
+   • Scroll to "Environment Variables"
+   • Click: Add Environment Variable
+   • Key: ANTHROPIC_API_KEY
+   • Value: [paste your API key]
+   • Click: Add
+
+☐ STEP 7: Deploy!
+   • Click: Create Web Service
+   • Wait 2-3 minutes for deployment
+   • Watch the logs scroll by
+   • When you see "Deploy succeeded" → YOU'RE LIVE!
+
+☐ STEP 8: Test Your Live App
+   • Copy the URL (e.g., https://sacred-wisdom-portal.onrender.com)
+   • Open in browser
+   • Select a teacher
+   • Ask a question
+   • Verify it works!
+
+
+═══════════════════════════════════════════════════════════════
+  ☐ POST-DEPLOYMENT
+═══════════════════════════════════════════════════════════════
+
+☐ Bookmark your app URL
+
+☐ Test on mobile phone
+   • Open URL on your phone
+   • Check responsive design
+   • Test meditation timer
+   • Try breathwork tool
+
+☐ Share with friends
+   • Send them the URL
+   • Show them how to use it
+   • Spread spiritual wisdom!
+
+☐ Monitor API usage
+   • Go to: https://console.anthropic.com/
+   • Check dashboard for usage
+   • Track your $5 free credit
+
+
+═══════════════════════════════════════════════════════════════
+  ☐ OPTIONAL: CUSTOM DOMAIN
+═══════════════════════════════════════════════════════════════
+
+☐ Buy domain (e.g., from Namecheap, GoDaddy)
+
+☐ In Render dashboard:
+   • Go to your service
+   • Click: Settings
+   • Scroll to: Custom Domains
+   • Click: Add Custom Domain
+   • Enter your domain
+   • Follow DNS instructions
+
+☐ Wait for DNS propagation (up to 24 hours)
+
+☐ Your app now at: yourdomain.com
+
+
+═══════════════════════════════════════════════════════════════
+  ☐ TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════
+
+☐ If deployment fails:
+   • Check Render logs for errors
+   • Verify ANTHROPIC_API_KEY is set correctly
+   • Make sure all files are in repository
+
+☐ If app doesn't load:
+   • Wait 3-5 minutes after deployment
+   • Check Render service status
+   • Try hard refresh (Ctrl+Shift+R)
+
+☐ If questions don't work:
+   • Verify API key is correct
+   • Check API credit balance
+   • Look at Render logs for errors
+
+☐ If mobile looks wrong:
+   • Clear browser cache
+   • Try different mobile browser
+   • Check viewport meta tag in HTML
+
+
+═══════════════════════════════════════════════════════════════
+  ✅ SUCCESS INDICATORS
+═══════════════════════════════════════════════════════════════
+
+You know it's working when:
+
+✓ Beautiful purple/gold interface loads
+✓ You can select teachers from dropdown
+✓ Typing and clicking "Receive Wisdom" works
+✓ You get a thoughtful spiritual response
+✓ Response appears in elegant formatting
+✓ You can save favorites
+✓ History shows your conversations
+✓ Meditation timer opens and works
+✓ Breathwork guide functions
+✓ Works on your phone beautifully
+
+
+═══════════════════════════════════════════════════════════════
+  🎉 YOU'RE DONE!
+═══════════════════════════════════════════════════════════════
+
+Congratulations! Your Sacred Wisdom Portal is now live and
+helping seekers around the world find spiritual guidance!
+
+Share your URL and spread the light! ✨
+
+═══════════════════════════════════════════════════════════════
+
+Questions? Check README.md for detailed help!
+
+🙏 Namaste ✨
+
