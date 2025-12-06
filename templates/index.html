@@ -1171,7 +1171,10 @@
         }
 
         async function toggleFavorite() {
-            if (!currentResponseId) return;
+            if (!currentResponseId) {
+                alert('Please ask a question first!');
+                return;
+            }
 
             const btn = document.getElementById('favorite-btn');
             const isFavorited = btn.classList.contains('favorited');
@@ -1189,10 +1192,18 @@
                 if (response.ok) {
                     btn.classList.toggle('favorited');
                     btn.textContent = isFavorited ? '★ Save' : '★ Saved';
-                    loadFavorites();
+                    // Immediately refresh favorites list
+                    setTimeout(() => {
+                        loadFavorites();
+                        // Show a quick confirmation
+                        if (!isFavorited) {
+                            alert('✨ Wisdom saved! Check the "Saved Wisdom" tab.');
+                        }
+                    }, 100);
                 }
             } catch (error) {
                 console.error('Error toggling favorite:', error);
+                alert('Error saving favorite. Please try again.');
             }
         }
 
@@ -1347,9 +1358,10 @@
             document.getElementById('breathwork-display').textContent = 'Inhale';
         }
 
-        // Load initial history if premium
+        // Load initial history and favorites if premium
         if (isPremium) {
             loadHistory();
+            loadFavorites();
         }
 
         // Allow Enter key to submit
