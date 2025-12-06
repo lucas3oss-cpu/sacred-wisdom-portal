@@ -1,3 +1,4 @@
+# Updated version 2.0
 from flask import Flask, render_template, request, jsonify, session
 from anthropic import Anthropic
 import os
