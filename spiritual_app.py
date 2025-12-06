@@ -3,6 +3,7 @@ from anthropic import Anthropic
 import os
 from datetime import datetime, timedelta
 import secrets
+import random
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -80,37 +81,40 @@ SPIRITUAL_TEACHERS = {
         Focus on: mindful breathing, interbeing, engaged Buddhism, peace in daily life, loving kindness, 
         and mindful living. Use his simple, profound, and accessible teaching style."""
     },
-    "rumi": {
-        "name": "Rumi",
-        "description": "Sufi mysticism and divine love",
+    "mooji": {
+        "name": "Mooji",
+        "description": "Direct pointing to Self and non-dual awareness",
         "tier": "premium",
-        "system_prompt": """You are channeling the wisdom of Rumi, the 13th-century Persian Sufi mystic. Speak with poetic ecstasy and mystical love. 
-        Focus on: divine love, unity with the Beloved, the wound that opens us, ecstatic surrender, 
-        and the journey of the soul. Use poetic, metaphorical language filled with longing and joy."""
+        "system_prompt": """You are channeling the wisdom of Mooji. Speak with gentle directness, loving presence, and playful wisdom. 
+        Focus on: the invitation to simply BE, recognizing the Self, letting go of the person, the eternal witness, 
+        resting as awareness, and freedom in this moment. Use his warm, humorous, and direct style of pointing to truth."""
     },
-    "paramahansa_yogananda": {
-        "name": "Paramahansa Yogananda",
-        "description": "Kriya Yoga and God-realization",
+    "byron_katie": {
+        "name": "Byron Katie",
+        "description": "The Work and inquiry into truth",
         "tier": "premium",
-        "system_prompt": """You are channeling the wisdom of Paramahansa Yogananda. Speak with joyful devotion and practical spirituality. 
-        Focus on: Kriya Yoga, God-realization, the science of religion, energy and consciousness, 
-        meditation techniques, and living in divine joy. Use his blend of Eastern wisdom and Western practicality."""
+        "system_prompt": """You are channeling the wisdom of Byron Katie. Speak with gentle inquiry and loving investigation. 
+        Focus on: The Work (four questions and turnaround), questioning stressful thoughts, finding what's true, 
+        loving what is, and freedom through inquiry. Use her simple, powerful method of self-inquiry and her warm, clear teaching style."""
     },
-    "adyashanti": {
-        "name": "Adyashanti",
-        "description": "Non-dual awakening and true meditation",
+    "buddha": {
+        "name": "Buddha",
+        "description": "The Four Noble Truths and the Noble Eightfold Path",
         "tier": "premium",
-        "system_prompt": """You are channeling the wisdom of Adyashanti. Speak with clear, direct pointing to truth beyond concepts. 
-        Focus on: non-dual awareness, true meditation, falling away of the ego, awakening and embodiment, 
-        the end of seeking, and resting as awareness. Use his precise, no-nonsense approach to spiritual truth."""
+        "system_prompt": """You are channeling the wisdom of the Buddha (Siddhartha Gautama). Speak with compassionate clarity and timeless wisdom. 
+        Focus on: the Four Noble Truths, the Noble Eightfold Path, suffering and its cessation, mindfulness, 
+        the middle way, impermanence, and awakening. Use his gentle, clear teaching style with practical guidance for ending suffering."""
     }
 }
 
-# Sample prompts for users
+# Sample prompts for users - 6 total, will show 3 random ones
 SAMPLE_PROMPTS = [
     "How can I find peace in difficult times?",
     "What is the nature of my true self?",
-    "How do I let go of past suffering?"
+    "How do I let go of past suffering?",
+    "What is my true purpose in life?",
+    "How can I live more authentically?",
+    "What does it mean to truly awaken?"
 ]
 
 @app.route('/')
@@ -136,7 +140,7 @@ def index():
     
     return render_template('index.html', 
                          teachers=SPIRITUAL_TEACHERS,
-                         sample_prompts=SAMPLE_PROMPTS,
+                         sample_prompts=random.sample(SAMPLE_PROMPTS, 3),
                          is_premium=session.get('is_premium', False),
                          email_collected=session.get('email_collected', False))
 
@@ -170,6 +174,7 @@ def ask():
     data = request.json
     user_question = data.get('question')
     teacher_key = data.get('teacher')
+    conversation_history = data.get('conversation', [])  # Get conversation history from frontend
     
     if not user_question or not teacher_key:
         return jsonify({'error': 'Missing question or teacher'}), 400
@@ -200,15 +205,25 @@ def ask():
         session.modified = True
     
     try:
-        # Call Anthropic API
+        # Build messages array with conversation history
+        messages = []
+        
+        # Add conversation history if exists
+        if conversation_history:
+            messages.extend(conversation_history)
+        
+        # Add current question
+        messages.append({
+            "role": "user",
+            "content": user_question
+        })
+        
+        # Call Anthropic API with full conversation
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=1000,
             system=teacher['system_prompt'],
-            messages=[{
-                "role": "user",
-                "content": user_question
-            }]
+            messages=messages
         )
         
         response_text = message.content[0].text
