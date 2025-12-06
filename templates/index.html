@@ -366,6 +366,12 @@
             flex-shrink: 0;
         }
 
+        .conversation-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
         .messages-container {
             flex: 1;
             overflow-y: auto;
@@ -948,7 +954,12 @@
                 <div id="response-area" class="response-area">
                     <div class="conversation-header">
                         <span id="current-teacher" class="teacher-name"></span>
-                        <button id="new-conversation-btn" class="btn-secondary" onclick="startNewConversation()" style="display: none;">New Conversation</button>
+                        <div class="conversation-actions">
+                            <button id="copy-conversation-btn" class="btn-secondary" onclick="copyConversation()" style="display: none;">
+                                <span id="copy-icon">📋</span> <span id="copy-text">Copy Conversation</span>
+                            </button>
+                            <button id="new-conversation-btn" class="btn-secondary" onclick="startNewConversation()" style="display: none;">New Conversation</button>
+                        </div>
                     </div>
                     <div id="messages-container" class="messages-container"></div>
                 </div>
@@ -1183,12 +1194,51 @@
         let currentConversation = [];
         let currentTeacher = null;
 
+        function copyConversation() {
+            const messages = document.querySelectorAll('.message');
+            if (messages.length === 0) {
+                alert('No conversation to copy yet!');
+                return;
+            }
+
+            let conversationText = `Conversation with ${currentTeacher}\n`;
+            conversationText += '='.repeat(50) + '\n\n';
+
+            messages.forEach(message => {
+                const label = message.querySelector('.message-label')?.textContent || '';
+                const text = message.querySelector('.message-text')?.textContent || '';
+                conversationText += `${label}\n${text}\n\n`;
+            });
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(conversationText).then(() => {
+                // Show success feedback
+                const btn = document.getElementById('copy-conversation-btn');
+                const icon = document.getElementById('copy-icon');
+                const text = document.getElementById('copy-text');
+                
+                icon.textContent = '✓';
+                text.textContent = 'Copied!';
+                btn.style.background = 'rgba(139, 122, 184, 0.3)';
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    icon.textContent = '📋';
+                    text.textContent = 'Copy Conversation';
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy. Please try again.');
+            });
+        }
+
         function startNewConversation() {
             currentConversation = [];
             currentTeacher = null;
             document.getElementById('messages-container').innerHTML = '';
             document.getElementById('response-area').classList.remove('active');
             document.getElementById('new-conversation-btn').style.display = 'none';
+            document.getElementById('copy-conversation-btn').style.display = 'none';
             document.getElementById('question-input').value = '';
         }
 
@@ -1245,6 +1295,7 @@
             askBtn.textContent = 'Channeling Wisdom...';
             responseArea.classList.add('active');
             document.getElementById('new-conversation-btn').style.display = 'inline-block';
+            document.getElementById('copy-conversation-btn').style.display = 'inline-block';
 
             // Add user message immediately
             addMessage('user', question);
