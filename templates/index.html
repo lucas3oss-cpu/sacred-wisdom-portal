@@ -252,8 +252,7 @@
         .input-area {
             position: fixed !important;
             bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 0;
             z-index: 100;
             background: var(--card-bg);
             backdrop-filter: blur(20px);
@@ -261,15 +260,16 @@
             border-radius: 15px 15px 0 0 !important;
             padding: 20px !important;
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3) !important;
-            max-width: 800px !important;
             width: 90% !important;
+            max-width: 800px !important;
             margin: 0 !important;
         }
 
         @media (min-width: 1024px) {
             .input-area {
-                width: 60% !important;
+                width: calc(100% - 400px) !important; /* Account for sidebar width */
                 max-width: 900px !important;
+                right: 20px;
             }
         }
 
