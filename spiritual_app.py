@@ -430,8 +430,9 @@ def ask():
             })
         
         return jsonify({
-            'answer': answer,
-            'questions_remaining': 5 - session.get('questions_asked_today', 0) if not session.get('is_premium') else 'unlimited'
+            'response': answer,
+            'teacher': teacher['name'],
+            'questions_remaining': 5 - session.get('questions_asked_today', 0) if not session.get('is_premium') else None
         })
     
     except Exception as e:
