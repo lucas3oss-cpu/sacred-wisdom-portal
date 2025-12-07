@@ -393,9 +393,12 @@ def ask():
         {"role": "user", "content": teacher['system_prompt']}
     ]
     
-    # Add conversation history if exists
+    # Add conversation history if exists, filtering out any invalid messages
     if conversation_history:
-        messages.extend(conversation_history)
+        for msg in conversation_history:
+            # Only add messages that have both role and non-empty content
+            if msg.get('role') and msg.get('content') and msg['content'].strip():
+                messages.append(msg)
     
     # Add current question
     messages.append({"role": "user", "content": question})
