@@ -683,41 +683,6 @@
             color: var(--accent-gold);
         }
 
-        /* Welcome Modal Specific */
-        .welcome-modal .modal-content {
-            text-align: center;
-        }
-
-        .welcome-modal h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
-            color: var(--accent-gold);
-            margin-bottom: 20px;
-        }
-
-        .welcome-modal p {
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-            line-height: 1.8;
-        }
-
-        .welcome-modal input {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            background: var(--primary-bg);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 10px;
-            color: var(--text-primary);
-            font-family: 'Crimson Pro', serif;
-            font-size: 1rem;
-        }
-
-        .welcome-modal input:focus {
-            outline: none;
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
-        }
 
         /* Tier Comparison */
         .tier-comparison {
@@ -1015,25 +980,6 @@
         </div>
     </div>
 
-    <!-- Welcome Modal -->
-    {% if not email_collected %}
-    <div id="welcome-modal" class="modal welcome-modal active">
-        <div class="modal-content">
-            <h2>🙏 Welcome to My Soul Compass</h2>
-            <p>Receive wisdom from 10 renowned spiritual teachers.</p>
-            <p><strong>Free Access Includes:</strong></p>
-            <ul style="text-align: left; margin: 20px 0;">
-                <li>5 questions per day</li>
-                <li>Access to 5 spiritual teachers</li>
-                <li>Meditation & breathwork tools</li>
-            </ul>
-            <p style="margin-top: 20px;">Enter your details to begin your journey:</p>
-            <input type="text" id="welcome-name" placeholder="Your Name" required>
-            <input type="email" id="welcome-email" placeholder="Your Email" required>
-            <button class="btn" style="width: 100%; margin-top: 20px;" onclick="collectEmail()">Start My Journey</button>
-        </div>
-    </div>
-    {% endif %}
 
     <!-- Upgrade Modal -->
     <div id="upgrade-modal" class="modal">
@@ -1153,38 +1099,6 @@
         // Initialize first teacher info
         document.getElementById('teacher-select').dispatchEvent(new Event('change'));
 
-        function collectEmail() {
-            const name = document.getElementById('welcome-name').value.trim();
-            const email = document.getElementById('welcome-email').value.trim();
-
-            if (!name || !email) {
-                alert('Please enter both your name and email');
-                return;
-            }
-
-            if (!email.includes('@')) {
-                alert('Please enter a valid email address');
-                return;
-            }
-
-            fetch('/collect_email', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ name, email })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById('welcome-modal').classList.remove('active');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Something went wrong. Please try again.');
-            });
-        }
 
         function showUpgradeModal() {
             document.getElementById('upgrade-modal').classList.add('active');
