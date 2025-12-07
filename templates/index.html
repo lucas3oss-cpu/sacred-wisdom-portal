@@ -1412,8 +1412,17 @@
 
         // Populate navigation dropdowns
         function populateDropdowns() {
+            console.log('Populating dropdowns...');
+            console.log('Teachers:', teachers);
+            console.log('Sample Prompts:', samplePrompts);
+            
             // Teachers dropdown
             const teachersDropdown = document.getElementById('teachers-dropdown');
+            if (!teachersDropdown) {
+                console.error('Teachers dropdown not found!');
+                return;
+            }
+            
             Object.keys(teachers).forEach(key => {
                 const teacher = teachers[key];
                 const item = document.createElement('div');
@@ -1428,35 +1437,46 @@
 
             // Sample questions dropdown
             const questionsDropdown = document.getElementById('questions-dropdown');
-            samplePrompts.forEach(prompt => {
-                const item = document.createElement('div');
-                item.className = 'dropdown-item';
-                item.textContent = prompt;
-                item.onclick = () => {
-                    usePrompt(prompt);
-                    closeAllDropdowns();
-                };
-                questionsDropdown.appendChild(item);
-            });
+            if (questionsDropdown && samplePrompts) {
+                samplePrompts.forEach(prompt => {
+                    const item = document.createElement('div');
+                    item.className = 'dropdown-item';
+                    item.textContent = prompt;
+                    item.onclick = () => {
+                        usePrompt(prompt);
+                        closeAllDropdowns();
+                    };
+                    questionsDropdown.appendChild(item);
+                });
+            }
 
             // Mobile questions list
             const mobileQuestionsList = document.getElementById('mobile-questions-list');
-            samplePrompts.forEach(prompt => {
-                const item = document.createElement('div');
-                item.className = 'dropdown-item';
-                item.textContent = prompt;
-                item.onclick = () => {
-                    usePrompt(prompt);
-                    toggleMobileMenu();
-                };
-                mobileQuestionsList.appendChild(item);
-            });
+            if (mobileQuestionsList && samplePrompts) {
+                samplePrompts.forEach(prompt => {
+                    const item = document.createElement('div');
+                    item.className = 'dropdown-item';
+                    item.textContent = prompt;
+                    item.onclick = () => {
+                        usePrompt(prompt);
+                        toggleMobileMenu();
+                    };
+                    mobileQuestionsList.appendChild(item);
+                });
+            }
+            
+            console.log('Dropdowns populated successfully!');
         }
 
         function selectTeacher(teacherKey) {
+            console.log('Selecting teacher:', teacherKey);
             currentTeacher = teacherKey;
             const teacher = teachers[teacherKey];
-            document.getElementById('current-teacher-nav').textContent = teacher.name;
+            
+            const navElement = document.getElementById('current-teacher-nav');
+            if (navElement) {
+                navElement.textContent = teacher.name;
+            }
             
             // Update mobile select too
             const mobileSelect = document.getElementById('teacher-select-mobile');
@@ -1465,10 +1485,18 @@
             }
             
             closeAllDropdowns();
+            console.log('Teacher selected:', teacher.name);
         }
 
         function toggleDropdown(dropdownId) {
+            console.log('Toggling dropdown:', dropdownId);
             const dropdown = document.getElementById(dropdownId);
+            
+            if (!dropdown) {
+                console.error('Dropdown not found:', dropdownId);
+                return;
+            }
+            
             const allDropdowns = document.querySelectorAll('.dropdown-content');
             
             allDropdowns.forEach(d => {
@@ -1478,6 +1506,7 @@
             });
             
             dropdown.classList.toggle('active');
+            console.log('Dropdown toggled. Active:', dropdown.classList.contains('active'));
         }
 
         function closeAllDropdowns() {
