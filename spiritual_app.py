@@ -15,7 +15,7 @@ app.secret_key = secrets.token_hex(16)
 client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
 # Resend API key for sending emails
-RESEND_API_KEY = "re_4oRxFfJH_PzRAEFP1BmtkFX3xkDZoQfjW"
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
 
 # Stripe webhook secret (you'll get this from Stripe dashboard)
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
