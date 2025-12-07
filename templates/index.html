@@ -67,6 +67,225 @@
             position: relative;
         }
 
+        /* Top Navigation Bar */
+        .top-nav {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(139, 122, 184, 0.3);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .nav-items {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-btn {
+            background: rgba(139, 122, 184, 0.1);
+            border: 1px solid rgba(139, 122, 184, 0.3);
+            padding: 8px 15px;
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(139, 122, 184, 0.2);
+            border-color: var(--accent-purple);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 5px;
+            background: var(--card-bg);
+            border: 1px solid rgba(139, 122, 184, 0.3);
+            border-radius: 10px;
+            min-width: 250px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .dropdown-content.active {
+            display: block;
+            animation: fadeInDown 0.2s ease-out;
+        }
+
+        .dropdown-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(139, 122, 184, 0.1);
+        }
+
+        .dropdown-item:hover {
+            background: rgba(139, 122, 184, 0.1);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .teacher-option {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .teacher-name {
+            font-weight: 600;
+            color: var(--accent-gold);
+        }
+
+        .teacher-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .upgrade-nav-btn {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #b8941f 100%);
+            border: none;
+            color: var(--primary-bg);
+            font-weight: 600;
+            padding: 10px 20px;
+        }
+
+        .upgrade-nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: rgba(139, 122, 184, 0.1);
+            border: 1px solid rgba(139, 122, 184, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(139, 122, 184, 0.3);
+            padding: 20px;
+            z-index: 1001;
+            overflow-y: auto;
+            transition: left 0.3s ease;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .mobile-menu.active {
+            left: 0;
+        }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+
+        .mobile-menu-overlay.active {
+            display: block;
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(139, 122, 184, 0.3);
+        }
+
+        .mobile-menu-close {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .mobile-menu-section {
+            margin-bottom: 25px;
+        }
+
+        .mobile-menu-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-items {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+
         .user-greeting {
             position: absolute;
             top: 20px;
@@ -205,23 +424,14 @@
         }
 
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-            animation: fadeIn 1s ease-out 0.3s both;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 250px; /* Space for fixed input */
         }
 
-        @media (min-width: 1024px) {
-            .main-content {
-                grid-template-columns: 350px 1fr;
-                padding-bottom: 200px; /* Space for fixed input */
-            }
-        }
-
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
+        .main-area {
+            width: 100%;
         }
 
         .card {
@@ -252,7 +462,8 @@
         .input-area {
             position: fixed !important;
             bottom: 0;
-            right: 0;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 100;
             background: var(--card-bg);
             backdrop-filter: blur(20px);
@@ -261,16 +472,8 @@
             padding: 20px !important;
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3) !important;
             width: 90% !important;
-            max-width: 800px !important;
+            max-width: 1200px !important;
             margin: 0 !important;
-        }
-
-        @media (min-width: 1024px) {
-            .input-area {
-                width: calc(100% - 400px) !important; /* Account for sidebar width */
-                max-width: 900px !important;
-                right: 20px;
-            }
         }
 
         .input-area label {
@@ -942,20 +1145,106 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <!-- User Greeting (shows when logged in - ready for auth system) -->
-            <div class="user-greeting" style="display: none;" id="user-greeting">
-                <span class="user-icon">🙏</span>
-                <span>Welcome, <span class="user-name" id="user-display-name">lucas</span></span>
-            </div>
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <div class="nav-brand">✨ My Soul Compass</div>
             
-            <h1>My Soul Compass</h1>
-            <p class="subtitle">Seek Guidance from the Masters</p>
-            {% if is_premium %}
-            <div class="tier-badge">✨ PREMIUM MEMBER ✨</div>
-            {% endif %}
-        </header>
+            <div class="nav-items">
+                <!-- Teacher Dropdown -->
+                <div class="nav-dropdown">
+                    <button class="nav-btn" onclick="toggleDropdown('teachers-dropdown')">
+                        <span id="current-teacher-nav">Select Teacher</span> ▼
+                    </button>
+                    <div id="teachers-dropdown" class="dropdown-content"></div>
+                </div>
+
+                <!-- Sample Questions Dropdown -->
+                <div class="nav-dropdown">
+                    <button class="nav-btn" onclick="toggleDropdown('questions-dropdown')">
+                        Sample Questions ▼
+                    </button>
+                    <div id="questions-dropdown" class="dropdown-content"></div>
+                </div>
+
+                <!-- Tools Dropdown -->
+                <div class="nav-dropdown">
+                    <button class="nav-btn" onclick="toggleDropdown('tools-dropdown')">
+                        Spiritual Tools ▼
+                    </button>
+                    <div id="tools-dropdown" class="dropdown-content">
+                        <div class="dropdown-item" onclick="openTimer(); closeAllDropdowns();">
+                            ⏱️ Meditation Timer
+                        </div>
+                        <div class="dropdown-item" onclick="openBreathwork(); closeAllDropdowns();">
+                            🌬️ Breathwork Guide
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if not is_premium %}
+        <button class="nav-btn upgrade-nav-btn" onclick="showUpgradeModal()">
+            🌟 Upgrade to Premium
+        </button>
+        {% else %}
+        <div class="tier-badge" style="margin: 0;">✨ PREMIUM ✨</div>
+        {% endif %}
+
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="mobile-menu-header">
+            <div class="nav-brand">✨ My Soul Compass</div>
+            <button class="mobile-menu-close" onclick="toggleMobileMenu()">✕</button>
+        </div>
+
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title">Select Teacher</div>
+            <select id="teacher-select-mobile" class="nav-btn" style="width: 100%;" onchange="selectTeacher(this.value)">
+                {% for key, teacher in teachers.items() %}
+                <option value="{{ key }}">
+                    {{ teacher.name }}{% if teacher.tier == 'premium' %} 👑{% endif %}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title">Sample Questions</div>
+            <div id="mobile-questions-list"></div>
+        </div>
+
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title">Spiritual Tools</div>
+            <div class="dropdown-item" onclick="openTimer(); toggleMobileMenu();">
+                ⏱️ Meditation Timer
+            </div>
+            <div class="dropdown-item" onclick="openBreathwork(); toggleMobileMenu();">
+                🌬️ Breathwork Guide
+            </div>
+        </div>
+
+        {% if not is_premium %}
+        <button class="nav-btn upgrade-nav-btn" style="width: 100%;" onclick="showUpgradeModal(); toggleMobileMenu();">
+            🌟 Upgrade to Premium
+        </button>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        <!-- User Greeting (shows when logged in) -->
+        <div class="user-greeting" style="display: none; position: absolute; top: 20px; right: 20px;" id="user-greeting">
+            <span class="user-icon">🙏</span>
+            <span>Welcome, <span class="user-name" id="user-display-name">lucas</span></span>
+        </div>
 
         {% if activated %}
         <div class="success-banner" id="success-banner">
@@ -966,59 +1255,13 @@
         {% endif %}
 
         {% if not is_premium %}
-        <div class="upgrade-banner">
-            <h3>🌟 Unlock Full Access to All 10 Spiritual Teachers</h3>
-            <p>Get unlimited questions, conversation history, and exclusive features. Choose 6 months ($37 AUD) or Lifetime access ($47 AUD)</p>
-            <button class="upgrade-btn" onclick="showUpgradeModal()">Upgrade to Premium</button>
-        </div>
-
         <div id="questions-counter" class="questions-remaining" style="display: none;">
             Questions remaining today: <strong><span id="questions-left">5</span>/5</strong>
         </div>
         {% endif %}
 
         <div class="main-content">
-            <aside class="sidebar">
-                <div class="card">
-                    <h2 class="card-title">Choose Your Guide</h2>
-                    <div class="teacher-select-container">
-                        <label for="teacher-select">Select a Spiritual Teacher:</label>
-                        <select id="teacher-select">
-                            {% for key, teacher in teachers.items() %}
-                            <option value="{{ key }}" class="{{ 'premium-option' if teacher.tier == 'premium' else 'free-option' }}">
-                                {{ teacher.name }}{% if teacher.tier == 'premium' %} 👑{% endif %}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div id="teacher-info" class="teacher-info"></div>
-                </div>
-
-                <div class="card">
-                    <h2 class="card-title">Sample Questions</h2>
-                    <div class="sample-prompts">
-                        {% for prompt in sample_prompts %}
-                        <button class="prompt-btn" onclick="usePrompt('{{ prompt }}')">{{ prompt }}</button>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h2 class="card-title">Spiritual Tools</h2>
-                    <div class="meditation-tools">
-                        <div class="tool-card" onclick="openTimer()">
-                            <div class="tool-icon">⏱️</div>
-                            <div class="tool-name">Meditation Timer</div>
-                        </div>
-                        <div class="tool-card" onclick="openBreathwork()">
-                            <div class="tool-icon">🌬️</div>
-                            <div class="tool-name">Breathwork</div>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-
-            <main class="main-area">
+            <div class="main-area">
                 <div class="card input-area">
                     <label for="question-input">Your Question:</label>
                     <textarea id="question-input" placeholder="Ask your question here..."></textarea>
@@ -1044,7 +1287,7 @@
                     <div id="history-list"></div>
                 </div>
                 {% endif %}
-            </main>
+            </div>
         </div>
     </div>
 
@@ -1149,6 +1392,7 @@
 
     <script>
         const teachers = {{ teachers | tojson }};
+        const samplePrompts = {{ sample_prompts | tojson }};
         const isPremium = {{ 'true' if is_premium else 'false' }};
         const userName = "{{ user_name if user_name else '' }}";
         let currentResponseId = null;
@@ -1157,6 +1401,8 @@
         let timerRunning = false;
         let breathworkInterval = null;
         let questionsRemaining = 5;
+        let currentTeacher = null;
+        let currentConversation = [];
 
         // Show user greeting if name exists
         if (userName && userName.trim()) {
@@ -1164,15 +1410,103 @@
             document.getElementById('user-display-name').textContent = userName;
         }
 
-        // Update teacher info on selection
-        document.getElementById('teacher-select').addEventListener('change', function() {
-            const teacher = teachers[this.value];
-            const tierBadge = teacher.tier === 'premium' ? ' 👑 PREMIUM' : '';
-            document.getElementById('teacher-info').textContent = teacher.description + tierBadge;
+        // Populate navigation dropdowns
+        function populateDropdowns() {
+            // Teachers dropdown
+            const teachersDropdown = document.getElementById('teachers-dropdown');
+            Object.keys(teachers).forEach(key => {
+                const teacher = teachers[key];
+                const item = document.createElement('div');
+                item.className = 'dropdown-item teacher-option';
+                item.innerHTML = `
+                    <div class="teacher-name">${teacher.name} ${teacher.tier === 'premium' ? '👑' : ''}</div>
+                    <div class="teacher-desc">${teacher.description}</div>
+                `;
+                item.onclick = () => selectTeacher(key);
+                teachersDropdown.appendChild(item);
+            });
+
+            // Sample questions dropdown
+            const questionsDropdown = document.getElementById('questions-dropdown');
+            samplePrompts.forEach(prompt => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                item.textContent = prompt;
+                item.onclick = () => {
+                    usePrompt(prompt);
+                    closeAllDropdowns();
+                };
+                questionsDropdown.appendChild(item);
+            });
+
+            // Mobile questions list
+            const mobileQuestionsList = document.getElementById('mobile-questions-list');
+            samplePrompts.forEach(prompt => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                item.textContent = prompt;
+                item.onclick = () => {
+                    usePrompt(prompt);
+                    toggleMobileMenu();
+                };
+                mobileQuestionsList.appendChild(item);
+            });
+        }
+
+        function selectTeacher(teacherKey) {
+            currentTeacher = teacherKey;
+            const teacher = teachers[teacherKey];
+            document.getElementById('current-teacher-nav').textContent = teacher.name;
+            
+            // Update mobile select too
+            const mobileSelect = document.getElementById('teacher-select-mobile');
+            if (mobileSelect) {
+                mobileSelect.value = teacherKey;
+            }
+            
+            closeAllDropdowns();
+        }
+
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            const allDropdowns = document.querySelectorAll('.dropdown-content');
+            
+            allDropdowns.forEach(d => {
+                if (d.id !== dropdownId) {
+                    d.classList.remove('active');
+                }
+            });
+            
+            dropdown.classList.toggle('active');
+        }
+
+        function closeAllDropdowns() {
+            document.querySelectorAll('.dropdown-content').forEach(d => {
+                d.classList.remove('active');
+            });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.nav-dropdown')) {
+                closeAllDropdowns();
+            }
         });
 
-        // Initialize first teacher info
-        document.getElementById('teacher-select').dispatchEvent(new Event('change'));
+        // Initialize dropdowns on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            populateDropdowns();
+            // Select first teacher by default
+            const firstTeacher = Object.keys(teachers)[0];
+            selectTeacher(firstTeacher);
+        });
 
 
         function showUpgradeModal() {
@@ -1299,22 +1633,16 @@
 
         async function askQuestion() {
             const question = document.getElementById('question-input').value.trim();
-            const selectedTeacher = document.getElementById('teacher-select').value;
 
             if (!question) {
                 alert('Please enter a question');
                 return;
             }
 
-            // If switching teachers, start new conversation
-            if (currentTeacher && currentTeacher !== selectedTeacher) {
-                if (!confirm('Starting a new conversation will clear your current chat. Continue?')) {
-                    return;
-                }
-                currentConversation = [];
+            if (!currentTeacher) {
+                alert('Please select a teacher from the navigation bar');
+                return;
             }
-
-            currentTeacher = selectedTeacher;
 
             const askBtn = document.getElementById('ask-btn');
             const responseArea = document.getElementById('response-area');
@@ -1349,7 +1677,7 @@
                     },
                     body: JSON.stringify({ 
                         question, 
-                        teacher: selectedTeacher,
+                        teacher: currentTeacher,
                         conversation: currentConversation 
                     })
                 });
