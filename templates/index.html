@@ -64,6 +64,27 @@
             padding: 40px 20px 20px;
             margin-bottom: 20px;
             animation: fadeInDown 0.8s ease-out;
+            position: relative;
+        }
+
+        .user-greeting {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .user-greeting .user-icon {
+            font-size: 1.5rem;
+        }
+
+        .user-greeting .user-name {
+            color: var(--accent-gold);
+            font-weight: 600;
         }
 
         h1 {
@@ -193,6 +214,7 @@
         @media (min-width: 1024px) {
             .main-content {
                 grid-template-columns: 350px 1fr;
+                padding-bottom: 200px; /* Space for fixed input */
             }
         }
 
@@ -224,6 +246,45 @@
             color: var(--accent-gold);
             margin-bottom: 20px;
             letter-spacing: 1px;
+        }
+
+        /* Fixed input at bottom */
+        .input-area {
+            position: fixed !important;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: none !important;
+            border-top: 1px solid rgba(139, 122, 184, 0.3) !important;
+            border-radius: 0 !important;
+            padding: 20px !important;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3) !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+        }
+
+        @media (min-width: 1024px) {
+            .input-area {
+                padding: 20px 50px 20px 400px !important; /* Make room for sidebar */
+            }
+        }
+
+        .input-area label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .input-area textarea {
+            min-height: 80px !important;
+        }
+
+        .input-area .btn {
+            margin-top: 10px;
         }
 
         .teacher-select-container {
@@ -882,6 +943,12 @@
 <body>
     <div class="container">
         <header>
+            <!-- User Greeting (shows when logged in - ready for auth system) -->
+            <div class="user-greeting" style="display: none;" id="user-greeting">
+                <span class="user-icon">🙏</span>
+                <span>Welcome, <span class="user-name" id="user-display-name">lucas</span></span>
+            </div>
+            
             <h1>My Soul Compass</h1>
             <p class="subtitle">Seek Guidance from the Masters</p>
             {% if is_premium %}
@@ -1082,12 +1149,19 @@
     <script>
         const teachers = {{ teachers | tojson }};
         const isPremium = {{ 'true' if is_premium else 'false' }};
+        const userName = "{{ user_name if user_name else '' }}";
         let currentResponseId = null;
         let timerInterval = null;
         let timerSeconds = 300;
         let timerRunning = false;
         let breathworkInterval = null;
         let questionsRemaining = 5;
+
+        // Show user greeting if name exists
+        if (userName && userName.trim()) {
+            document.getElementById('user-greeting').style.display = 'flex';
+            document.getElementById('user-display-name').textContent = userName;
+        }
 
         // Update teacher info on selection
         document.getElementById('teacher-select').addEventListener('change', function() {
