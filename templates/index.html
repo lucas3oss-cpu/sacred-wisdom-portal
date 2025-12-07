@@ -108,6 +108,39 @@
             animation: fadeIn 1s ease-out;
         }
 
+        .success-banner {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(139, 195, 74, 0.2) 100%);
+            border: 2px solid #4caf50;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        .success-banner h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+
+        .success-banner p {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .upgrade-banner h3 {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.8rem;
@@ -890,6 +923,14 @@
             <div class="tier-badge">✨ PREMIUM MEMBER ✨</div>
             {% endif %}
         </header>
+
+        {% if activated %}
+        <div class="success-banner" id="success-banner">
+            <h3>🎉 Premium Access Activated!</h3>
+            <p>Welcome {{ user_name }}! You now have full access to all 10 spiritual teachers and unlimited questions.</p>
+            <button onclick="document.getElementById('success-banner').style.display='none'" style="background: transparent; border: 1px solid white; color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; margin-top: 10px;">Got it!</button>
+        </div>
+        {% endif %}
 
         {% if not is_premium %}
         <div class="upgrade-banner">
