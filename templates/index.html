@@ -252,23 +252,24 @@
         .input-area {
             position: fixed !important;
             bottom: 0;
-            left: 0;
-            right: 0;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 100;
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            border: none !important;
-            border-top: 1px solid rgba(139, 122, 184, 0.3) !important;
-            border-radius: 0 !important;
+            border: 1px solid rgba(139, 122, 184, 0.3) !important;
+            border-radius: 15px 15px 0 0 !important;
             padding: 20px !important;
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3) !important;
-            max-width: 100% !important;
+            max-width: 800px !important;
+            width: 90% !important;
             margin: 0 !important;
         }
 
         @media (min-width: 1024px) {
             .input-area {
-                padding: 20px 50px 20px 400px !important; /* Make room for sidebar */
+                width: 60% !important;
+                max-width: 900px !important;
             }
         }
 
