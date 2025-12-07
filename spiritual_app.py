@@ -320,6 +320,19 @@ def activate_premium(token):
     # Redirect to home with success message
     return redirect('/?activated=true')
 
+@app.route('/verify_premium', methods=['POST'])
+def verify_premium():
+    """Verify premium access code"""
+    data = request.json
+    code = data.get('code', '').strip()
+    
+    if code == PREMIUM_ACCESS_CODE:
+        session['is_premium'] = True
+        session['plan_type'] = 'lifetime'
+        return jsonify({'success': True, 'message': 'Premium access activated!'})
+    else:
+        return jsonify({'success': False, 'message': 'Invalid access code'}), 400
+
 @app.route('/')
 def index():
     # Check if just activated
