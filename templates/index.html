@@ -1153,7 +1153,7 @@
             <div class="nav-items">
                 <!-- Teacher Dropdown -->
                 <div class="nav-dropdown">
-                    <button class="nav-btn" onclick="toggleDropdown('teachers-dropdown')">
+                    <button class="nav-btn" id="teachers-dropdown-btn">
                         <span id="current-teacher-nav">Select Teacher</span> ▼
                     </button>
                     <div id="teachers-dropdown" class="dropdown-content"></div>
@@ -1161,7 +1161,7 @@
 
                 <!-- Sample Questions Dropdown -->
                 <div class="nav-dropdown">
-                    <button class="nav-btn" onclick="toggleDropdown('questions-dropdown')">
+                    <button class="nav-btn" id="questions-dropdown-btn">
                         Sample Questions ▼
                     </button>
                     <div id="questions-dropdown" class="dropdown-content"></div>
@@ -1169,14 +1169,14 @@
 
                 <!-- Tools Dropdown -->
                 <div class="nav-dropdown">
-                    <button class="nav-btn" onclick="toggleDropdown('tools-dropdown')">
+                    <button class="nav-btn" id="tools-dropdown-btn">
                         Spiritual Tools ▼
                     </button>
                     <div id="tools-dropdown" class="dropdown-content">
-                        <div class="dropdown-item" onclick="openTimer(); closeAllDropdowns();">
+                        <div class="dropdown-item" id="timer-btn">
                             ⏱️ Meditation Timer
                         </div>
-                        <div class="dropdown-item" onclick="openBreathwork(); closeAllDropdowns();">
+                        <div class="dropdown-item" id="breathwork-btn">
                             🌬️ Breathwork Guide
                         </div>
                     </div>
@@ -1185,7 +1185,7 @@
         </div>
 
         {% if not is_premium %}
-        <button class="nav-btn upgrade-nav-btn" onclick="showUpgradeModal()">
+        <button class="nav-btn upgrade-nav-btn" id="upgrade-nav-btn">
             🌟 Upgrade to Premium
         </button>
         {% else %}
@@ -1193,17 +1193,17 @@
         {% endif %}
 
         <!-- Mobile Menu Button -->
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
     </nav>
 
     <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobile-menu-overlay" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
 
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobile-menu">
         <div class="mobile-menu-header">
             <div class="nav-brand">✨ My Soul Compass</div>
-            <button class="mobile-menu-close" onclick="toggleMobileMenu()">✕</button>
+            <button class="mobile-menu-close" id="mobile-menu-close">✕</button>
         </div>
 
         <div class="mobile-menu-section">
@@ -1224,16 +1224,16 @@
 
         <div class="mobile-menu-section">
             <div class="mobile-menu-title">Spiritual Tools</div>
-            <div class="dropdown-item" onclick="openTimer(); toggleMobileMenu();">
+            <div class="dropdown-item" id="mobile-timer-btn">
                 ⏱️ Meditation Timer
             </div>
-            <div class="dropdown-item" onclick="openBreathwork(); toggleMobileMenu();">
+            <div class="dropdown-item" id="mobile-breathwork-btn">
                 🌬️ Breathwork Guide
             </div>
         </div>
 
         {% if not is_premium %}
-        <button class="nav-btn upgrade-nav-btn" style="width: 100%;" onclick="showUpgradeModal(); toggleMobileMenu();">
+        <button class="nav-btn upgrade-nav-btn" id="mobile-upgrade-btn" style="width: 100%;">
             🌟 Upgrade to Premium
         </button>
         {% endif %}
@@ -1531,10 +1531,90 @@
 
         // Initialize dropdowns on page load
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing...');
+            
             populateDropdowns();
+            
             // Select first teacher by default
             const firstTeacher = Object.keys(teachers)[0];
             selectTeacher(firstTeacher);
+            
+            // Attach event listeners to dropdown buttons
+            const teachersBtn = document.getElementById('teachers-dropdown-btn');
+            const questionsBtn = document.getElementById('questions-dropdown-btn');
+            const toolsBtn = document.getElementById('tools-dropdown-btn');
+            
+            if (teachersBtn) {
+                teachersBtn.addEventListener('click', () => toggleDropdown('teachers-dropdown'));
+            }
+            if (questionsBtn) {
+                questionsBtn.addEventListener('click', () => toggleDropdown('questions-dropdown'));
+            }
+            if (toolsBtn) {
+                toolsBtn.addEventListener('click', () => toggleDropdown('tools-dropdown'));
+            }
+            
+            // Attach mobile menu event listeners
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            }
+            if (mobileMenuClose) {
+                mobileMenuClose.addEventListener('click', toggleMobileMenu);
+            }
+            if (mobileMenuOverlay) {
+                mobileMenuOverlay.addEventListener('click', toggleMobileMenu);
+            }
+            
+            // Attach tools buttons
+            const timerBtn = document.getElementById('timer-btn');
+            const breathworkBtn = document.getElementById('breathwork-btn');
+            const mobileTimerBtn = document.getElementById('mobile-timer-btn');
+            const mobileBreathworkBtn = document.getElementById('mobile-breathwork-btn');
+            
+            if (timerBtn) {
+                timerBtn.addEventListener('click', () => {
+                    openTimer();
+                    closeAllDropdowns();
+                });
+            }
+            if (breathworkBtn) {
+                breathworkBtn.addEventListener('click', () => {
+                    openBreathwork();
+                    closeAllDropdowns();
+                });
+            }
+            if (mobileTimerBtn) {
+                mobileTimerBtn.addEventListener('click', () => {
+                    openTimer();
+                    toggleMobileMenu();
+                });
+            }
+            if (mobileBreathworkBtn) {
+                mobileBreathworkBtn.addEventListener('click', () => {
+                    openBreathwork();
+                    toggleMobileMenu();
+                });
+            }
+            
+            // Attach upgrade buttons
+            const upgradeNavBtn = document.getElementById('upgrade-nav-btn');
+            const mobileUpgradeBtn = document.getElementById('mobile-upgrade-btn');
+            
+            if (upgradeNavBtn) {
+                upgradeNavBtn.addEventListener('click', showUpgradeModal);
+            }
+            if (mobileUpgradeBtn) {
+                mobileUpgradeBtn.addEventListener('click', () => {
+                    showUpgradeModal();
+                    toggleMobileMenu();
+                });
+            }
+            
+            console.log('Initialization complete!');
         });
 
 
