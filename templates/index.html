@@ -93,12 +93,35 @@
 
         .nav-brand {
             font-family: 'Cormorant Garamond', serif;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand-title {
             font-size: 1.5rem;
             background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-purple) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-weight: 600;
             white-space: nowrap;
+        }
+
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            font-family: 'Crimson Pro', serif;
+            font-style: italic;
+        }
+
+        @media (max-width: 480px) {
+            .brand-tagline {
+                font-size: 0.65rem;
+            }
         }
 
         .nav-items {
@@ -1148,7 +1171,10 @@
     <!-- Top Navigation Bar -->
     <nav class="top-nav">
         <div class="nav-left">
-            <div class="nav-brand">✨ My Soul Compass</div>
+            <div class="nav-brand">
+                <div class="brand-title">✨ My Soul Compass</div>
+                <div class="brand-tagline">Gentle Divine Wisdom For My Daily Journey</div>
+            </div>
             
             <div class="nav-items">
                 <!-- Teacher Dropdown -->
@@ -1202,7 +1228,10 @@
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobile-menu">
         <div class="mobile-menu-header">
-            <div class="nav-brand">✨ My Soul Compass</div>
+            <div class="nav-brand">
+                <div class="brand-title">✨ My Soul Compass</div>
+                <div class="brand-tagline">Gentle Divine Wisdom For My Daily Journey</div>
+            </div>
             <button class="mobile-menu-close" id="mobile-menu-close">✕</button>
         </div>
 
