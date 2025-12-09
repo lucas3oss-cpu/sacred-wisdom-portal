@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Blog Post - My Soul Compass</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #d4a574;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #d4a574 0%, #e9c9e3 50%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #d4a574;
+        }
+
+        /* Article Container */
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Back Button */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #d4a574;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s;
+        }
+
+        .back-button:hover {
+            gap: 0.25rem;
+        }
+
+        /* Article Header */
+        .article-header {
+            margin-bottom: 2rem;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #d4a574 0%, #e9c9e3 50%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 2rem;
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .author {
+            color: #d4a574;
+        }
+
+        /* Cover Image */
+        .article-cover {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        /* Article Content */
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e0e0e0;
+        }
+
+        .article-content h2 {
+            color: #d4a574;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .article-content h3 {
+            color: #e9c9e3;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.4rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid #d4a574;
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: #b0b0b0;
+        }
+
+        .article-content a {
+            color: #a78bfa;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .article-content a:hover {
+            border-bottom-color: #a78bfa;
+        }
+
+        .article-content code {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        .article-content pre {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+            border: 1px solid rgba(212, 165, 116, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .cta-section h3 {
+            font-size: 1.8rem;
+            color: #d4a574;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: #b0b0b0;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #d4a574 0%, #e9c9e3 50%, #a78bfa 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.3);
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        /* Error State */
+        .error-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .error-state h2 {
+            font-size: 2rem;
+            color: #d4a574;
+            margin-bottom: 1rem;
+        }
+
+        .error-state p {
+            color: #888;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 1.8rem;
+            }
+
+            .article-content {
+                font-size: 1rem;
+            }
+
+            .article-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="/" class="logo">
+            <span class="logo-icon">🧭</span>
+            <span class="logo-text">My Soul Compass</span>
+        </a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/blog">Blog</a>
+            <a href="/affiliate">Affiliate</a>
+            <div id="auth-buttons"></div>
+        </div>
+    </nav>
+
+    <!-- Article Container -->
+    <div class="article-container">
+        <div id="article-content">
+            <div class="loading">Loading post...</div>
+        </div>
+    </div>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://qupgrayetnawfomcepai.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1cGdyYXlldG5hd2ZvbWNlcGFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM2NzA1NjEsImV4cCI6MjA0OTI0NjU2MX0.cKGcCnr8Bk1UPxu1vwT0_hzVXPBHKlGxlE8tmZ5SD8k';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Get slug from URL
+        function getSlugFromURL() {
+            const path = window.location.pathname;
+            const parts = path.split('/');
+            return parts[parts.length - 1];
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Convert markdown-style content to HTML
+        function convertToHTML(content) {
+            // Simple markdown-to-HTML conversion
+            return content
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+        }
+
+        // Load blog post
+        async function loadBlogPost() {
+            const slug = getSlugFromURL();
+            const container = document.getElementById('article-content');
+            
+            try {
+                const { data: post, error } = await supabase
+                    .from('blog_posts')
+                    .select('*')
+                    .eq('slug', slug)
+                    .eq('published', true)
+                    .single();
+
+                if (error) throw error;
+
+                if (post) {
+                    // Update page title
+                    document.getElementById('page-title').textContent = `${post.title} - My Soul Compass`;
+
+                    // Render post
+                    const articleHTML = `
+                        <a href="/blog" class="back-button">← Back to Blog</a>
+                        
+                        <article>
+                            <div class="article-header">
+                                <h1 class="article-title">${post.title}</h1>
+                                <div class="article-meta">
+                                    <span class="author">👤 ${post.author_name || 'Luke'}</span>
+                                    <span>📅 ${formatDate(post.created_at)}</span>
+                                </div>
+                            </div>
+
+                            ${post.cover_image ? `
+                                <img src="${post.cover_image}" alt="${post.title}" class="article-cover">
+                            ` : ''}
+
+                            <div class="article-content">
+                                <p>${convertToHTML(post.content)}</p>
+                            </div>
+                        </article>
+
+                        <div class="cta-section">
+                            <h3>Experience My Soul Compass</h3>
+                            <p>Get daily spiritual wisdom from Alan Watts, Carl Jung, Rudolf Steiner, and more.</p>
+                            <a href="/" class="cta-button">Try It Free</a>
+                        </div>
+                    `;
+
+                    container.innerHTML = articleHTML;
+                } else {
+                    throw new Error('Post not found');
+                }
+            } catch (error) {
+                console.error('Error loading post:', error);
+                container.innerHTML = `
+                    <div class="error-state">
+                        <h2>Post Not Found</h2>
+                        <p>The blog post you're looking for doesn't exist or has been removed.</p>
+                        <a href="/blog" class="cta-button">Back to Blog</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Check authentication and update nav
+        async function updateAuthButtons() {
+            const { data: { session } } = await supabase.auth.getSession();
+            const authButtonsDiv = document.getElementById('auth-buttons');
+            
+            if (session) {
+                const { data: profile } = await supabase
+                    .from('user_profiles')
+                    .select('display_name')
+                    .eq('user_id', session.user.id)
+                    .single();
+
+                const displayName = profile?.display_name || session.user.email.split('@')[0];
+                
+                authButtonsDiv.innerHTML = `
+                    <span style="color: #d4a574;">👤 ${displayName}</span>
+                    <a href="/admin/blog">Admin</a>
+                    <a href="#" onclick="logout(); return false;">Logout</a>
+                `;
+            } else {
+                authButtonsDiv.innerHTML = `
+                    <a href="/login">Login</a>
+                `;
+            }
+        }
+
+        // Logout function
+        async function logout() {
+            await supabase.auth.signOut();
+            window.location.href = '/';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBlogPost();
+            updateAuthButtons();
+        });
+    </script>
+</body>
+</html>

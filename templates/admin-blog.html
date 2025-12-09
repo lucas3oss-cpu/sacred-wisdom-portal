@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Admin - My Soul Compass</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #d4a574;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #d4a574 0%, #e9c9e3 50%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #d4a574;
+        }
+
+        /* Admin Container */
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .admin-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #d4a574 0%, #e9c9e3 50%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4a574 0%, #e9c9e3 50%, #a78bfa 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        .btn-danger {
+            background: rgba(255, 59, 48, 0.8);
+            color: white;
+        }
+
+        .btn-success {
+            background: rgba(52, 199, 89, 0.8);
+            color: white;
+        }
+
+        /* Posts List */
+        .posts-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .post-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .post-info h3 {
+            color: #d4a574;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .post-meta {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-excerpt {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-published {
+            background: rgba(52, 199, 89, 0.2);
+            color: #34c759;
+        }
+
+        .status-draft {
+            background: rgba(255, 159, 10, 0.2);
+            color: #ff9f0a;
+        }
+
+        /* Editor Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            border: 1px solid rgba(212, 165, 116, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+            margin: 2rem auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-header h2 {
+            color: #d4a574;
+            font-size: 2rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            color: #e0e0e0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #d4a574;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 300px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state h2 {
+            color: #d4a574;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: #888;
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .post-item {
+                grid-template-columns: 1fr;
+            }
+
+            .post-actions {
+                justify-content: flex-start;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="/" class="logo">
+            <span class="logo-icon">🧭</span>
+            <span class="logo-text">My Soul Compass</span>
+        </a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/blog">Blog</a>
+            <a href="/affiliate">Affiliate</a>
+            <div id="auth-buttons"></div>
+        </div>
+    </nav>
+
+    <!-- Admin Container -->
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Blog Posts</h1>
+            <button class="btn btn-primary" onclick="openEditor()">✍️ New Post</button>
+        </div>
+
+        <div id="posts-container">
+            <div class="loading">Loading posts...</div>
+        </div>
+    </div>
+
+    <!-- Editor Modal -->
+    <div id="editor-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">New Blog Post</h2>
+                <button class="close-modal" onclick="closeEditor()">×</button>
+            </div>
+
+            <form id="post-form">
+                <input type="hidden" id="post-id">
+                
+                <div class="form-group">
+                    <label for="post-title">Title *</label>
+                    <input type="text" id="post-title" required placeholder="Enter post title...">
+                </div>
+
+                <div class="form-group">
+                    <label for="post-slug">Slug * (URL-friendly, e.g., my-post-title)</label>
+                    <input type="text" id="post-slug" required placeholder="my-post-title">
+                </div>
+
+                <div class="form-group">
+                    <label for="post-excerpt">Excerpt (Short description)</label>
+                    <textarea id="post-excerpt" rows="3" placeholder="Brief summary of your post..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-content">Content *</label>
+                    <textarea id="post-content" required placeholder="Write your post content here...
+
+You can use simple formatting:
+**bold text**
+*italic text*
+
+Paragraphs are separated by blank lines."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-cover">Cover Image URL (optional)</label>
+                    <input type="url" id="post-cover" placeholder="https://example.com/image.jpg">
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="post-published">
+                        <label for="post-published" style="margin: 0;">Publish immediately</label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">💾 Save Post</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditor()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://qupgrayetnawfomcepai.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1cGdyYXlldG5hd2ZvbWNlcGFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM2NzA1NjEsImV4cCI6MjA0OTI0NjU2MX0.cKGcCnr8Bk1UPxu1vwT0_hzVXPBHKlGxlE8tmZ5SD8k';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUserId = null;
+
+        // Format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Check authentication
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (!session) {
+                window.location.href = '/login';
+                return false;
+            }
+            
+            currentUserId = session.user.id;
+            updateAuthButtons(session);
+            return true;
+        }
+
+        // Update auth buttons
+        async function updateAuthButtons(session) {
+            const authButtonsDiv = document.getElementById('auth-buttons');
+            
+            const { data: profile } = await supabase
+                .from('user_profiles')
+                .select('display_name')
+                .eq('user_id', session.user.id)
+                .single();
+
+            const displayName = profile?.display_name || session.user.email.split('@')[0];
+            
+            authButtonsDiv.innerHTML = `
+                <span style="color: #d4a574;">👤 ${displayName}</span>
+                <a href="#" onclick="logout(); return false;">Logout</a>
+            `;
+        }
+
+        // Load all posts
+        async function loadPosts() {
+            const container = document.getElementById('posts-container');
+            
+            try {
+                const { data: posts, error } = await supabase
+                    .from('blog_posts')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (posts && posts.length > 0) {
+                    const postsHTML = `
+                        <div class="posts-grid">
+                            ${posts.map(post => `
+                                <div class="post-item">
+                                    <div class="post-info">
+                                        <h3>${post.title}</h3>
+                                        <div class="post-meta">
+                                            <span class="status-badge ${post.published ? 'status-published' : 'status-draft'}">
+                                                ${post.published ? '✓ Published' : '✎ Draft'}
+                                            </span>
+                                            • ${formatDate(post.created_at)}
+                                            • ${post.author_name || 'Luke'}
+                                        </div>
+                                        <p class="post-excerpt">${post.excerpt || 'No excerpt'}</p>
+                                    </div>
+                                    <div class="post-actions">
+                                        ${post.published ? `
+                                            <a href="/blog/${post.slug}" target="_blank" class="btn btn-secondary">👁️ View</a>
+                                        ` : ''}
+                                        <button class="btn btn-secondary" onclick='editPost(${JSON.stringify(post)})'>✏️ Edit</button>
+                                        <button class="btn btn-danger" onclick="deletePost('${post.id}', '${post.title}')">🗑️ Delete</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    container.innerHTML = postsHTML;
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <h2>No Posts Yet</h2>
+                            <p>Create your first blog post to get started!</p>
+                            <button class="btn btn-primary" onclick="openEditor()">✍️ Create Post</button>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading posts:', error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h2>Error Loading Posts</h2>
+                        <p>Please try again later.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Open editor modal
+        function openEditor() {
+            document.getElementById('editor-modal').classList.add('active');
+            document.getElementById('modal-title').textContent = 'New Blog Post';
+            document.getElementById('post-form').reset();
+            document.getElementById('post-id').value = '';
+        }
+
+        // Close editor modal
+        function closeEditor() {
+            document.getElementById('editor-modal').classList.remove('active');
+        }
+
+        // Edit post
+        function editPost(post) {
+            document.getElementById('editor-modal').classList.add('active');
+            document.getElementById('modal-title').textContent = 'Edit Blog Post';
+            document.getElementById('post-id').value = post.id;
+            document.getElementById('post-title').value = post.title;
+            document.getElementById('post-slug').value = post.slug;
+            document.getElementById('post-excerpt').value = post.excerpt || '';
+            document.getElementById('post-content').value = post.content;
+            document.getElementById('post-cover').value = post.cover_image || '';
+            document.getElementById('post-published').checked = post.published;
+        }
+
+        // Auto-generate slug from title
+        document.getElementById('post-title')?.addEventListener('input', (e) => {
+            const slugInput = document.getElementById('post-slug');
+            if (!slugInput.value || slugInput.dataset.auto !== 'false') {
+                const slug = e.target.value
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+                slugInput.value = slug;
+            }
+        });
+
+        document.getElementById('post-slug')?.addEventListener('input', () => {
+            document.getElementById('post-slug').dataset.auto = 'false';
+        });
+
+        // Save post
+        document.getElementById('post-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const postId = document.getElementById('post-id').value;
+            const postData = {
+                title: document.getElementById('post-title').value,
+                slug: document.getElementById('post-slug').value,
+                excerpt: document.getElementById('post-excerpt').value,
+                content: document.getElementById('post-content').value,
+                cover_image: document.getElementById('post-cover').value || null,
+                published: document.getElementById('post-published').checked,
+                author_id: currentUserId,
+                author_name: 'Luke',
+                updated_at: new Date().toISOString()
+            };
+
+            try {
+                let result;
+                if (postId) {
+                    // Update existing post
+                    result = await supabase
+                        .from('blog_posts')
+                        .update(postData)
+                        .eq('id', postId);
+                } else {
+                    // Create new post
+                    result = await supabase
+                        .from('blog_posts')
+                        .insert([postData]);
+                }
+
+                if (result.error) throw result.error;
+
+                closeEditor();
+                loadPosts();
+                alert('Post saved successfully!');
+            } catch (error) {
+                console.error('Error saving post:', error);
+                alert('Error saving post: ' + error.message);
+            }
+        });
+
+        // Delete post
+        async function deletePost(postId, postTitle) {
+            if (!confirm(`Are you sure you want to delete "${postTitle}"?`)) {
+                return;
+            }
+
+            try {
+                const { error } = await supabase
+                    .from('blog_posts')
+                    .delete()
+                    .eq('id', postId);
+
+                if (error) throw error;
+
+                loadPosts();
+                alert('Post deleted successfully!');
+            } catch (error) {
+                console.error('Error deleting post:', error);
+                alert('Error deleting post: ' + error.message);
+            }
+        }
+
+        // Logout
+        async function logout() {
+            await supabase.auth.signOut();
+            window.location.href = '/';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            const authenticated = await checkAuth();
+            if (authenticated) {
+                loadPosts();
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('editor-modal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'editor-modal') {
+                closeEditor();
+            }
+        });
+    </script>
+</body>
+</html>
