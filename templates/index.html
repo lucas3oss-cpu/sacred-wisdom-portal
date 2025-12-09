@@ -230,6 +230,38 @@
             font-size: 1.5rem;
         }
 
+        .nav-account {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: 15px;
+        }
+
+        .user-greeting-nav {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        .nav-btn-login, .nav-btn-logout {
+            padding: 8px 20px;
+            background: transparent;
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-purple);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .nav-btn-login:hover, .nav-btn-logout:hover {
+            background: var(--accent-purple);
+            color: white;
+            transform: translateY(-2px);
+        }
+
         .mobile-menu {
             display: none;
             position: fixed;
@@ -306,6 +338,14 @@
 
             .mobile-menu {
                 display: block;
+            }
+
+            .nav-account {
+                display: none;
+            }
+
+            .upgrade-nav-btn {
+                display: none;
             }
         }
 
@@ -1218,6 +1258,18 @@
         <div class="tier-badge" style="margin: 0;">✨ PREMIUM ✨</div>
         {% endif %}
 
+        <!-- User Account Section -->
+        <div class="nav-account">
+            {% if is_logged_in %}
+            <!-- Logged in: Show name and logout -->
+            <span class="user-greeting-nav">🙏 {{ user_name }}</span>
+            <a href="/logout" class="nav-btn nav-btn-logout">Logout</a>
+            {% else %}
+            <!-- Not logged in: Show login button -->
+            <a href="/login" class="nav-btn nav-btn-login">Login</a>
+            {% endif %}
+        </div>
+
         <!-- Mobile Menu Button -->
         <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
     </nav>
@@ -1266,6 +1318,22 @@
             🌟 Upgrade to Premium
         </button>
         {% endif %}
+
+        <!-- Mobile Account Section -->
+        <div class="mobile-menu-section" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+            {% if is_logged_in %}
+            <div style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
+                🙏 {{ user_name }}
+            </div>
+            <a href="/logout" class="nav-btn" style="width: 100%; display: block; text-align: center; text-decoration: none;">
+                Logout
+            </a>
+            {% else %}
+            <a href="/login" class="nav-btn" style="width: 100%; display: block; text-align: center; text-decoration: none; background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-purple) 100%); color: white;">
+                Login
+            </a>
+            {% endif %}
+        </div>
     </div>
 
     <div class="container">
