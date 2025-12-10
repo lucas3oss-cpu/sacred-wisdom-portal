@@ -20,10 +20,29 @@ supabase_url = os.environ.get("SUPABASE_URL")
 supabase_key = os.environ.get("SUPABASE_KEY")
 supabase: Client = create_client(supabase_url, supabase_key)
 
+# Define spiritual teachers
+TEACHERS = {
+    "Alan Watts": {
+        "name": "Alan Watts",
+        "description": "British philosopher and interpreter of Eastern philosophy",
+        "image": "🧘"
+    },
+    "Carl Jung": {
+        "name": "Carl Jung",
+        "description": "Swiss psychiatrist and psychoanalyst",
+        "image": "🧠"
+    },
+    "Rudolf Steiner": {
+        "name": "Rudolf Steiner",
+        "description": "Austrian philosopher and founder of Anthroposophy",
+        "image": "🌟"
+    }
+}
+
 # Home page
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', teachers=TEACHERS)
 
 # Login page
 @app.route('/login')
