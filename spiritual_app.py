@@ -291,6 +291,80 @@ def blog_post(slug):
 def admin_blog():
     return render_template('admin-blog.html')
 
+# Blog API routes
+@app.route('/api/blog/posts', methods=['GET'])
+def get_blog_posts():
+    """Get all blog posts"""
+    try:
+        response = supabase.table('blog_posts').select('*').order('created_at', desc=True).execute()
+        return jsonify({'success': True, 'posts': response.data})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/blog/posts', methods=['POST'])
+def create_blog_post():
+    """Create a new blog post"""
+    user_profile = get_current_user()
+    if not user_profile:
+        return jsonify({'success': False, 'error': 'Not authenticated'}), 401
+    
+    try:
+        data = request.json
+        post_data = {
+            'title': data.get('title'),
+            'slug': data.get('slug'),
+            'content': data.get('content'),
+            'excerpt': data.get('excerpt'),
+            'cover_image': data.get('cover_image'),
+            'published': data.get('published', False),
+            'author_id': user_profile['user_id'],
+            'author_name': user_profile.get('name', user_profile.get('email', 'Luke')),
+            'created_at': datetime.now().isoformat(),
+            'updated_at': datetime.now().isoformat()
+        }
+        
+        response = supabase.table('blog_posts').insert(post_data).execute()
+        return jsonify({'success': True, 'post': response.data[0] if response.data else None})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/blog/posts/<post_id>', methods=['PUT'])
+def update_blog_post(post_id):
+    """Update an existing blog post"""
+    user_profile = get_current_user()
+    if not user_profile:
+        return jsonify({'success': False, 'error': 'Not authenticated'}), 401
+    
+    try:
+        data = request.json
+        post_data = {
+            'title': data.get('title'),
+            'slug': data.get('slug'),
+            'content': data.get('content'),
+            'excerpt': data.get('excerpt'),
+            'cover_image': data.get('cover_image'),
+            'published': data.get('published', False),
+            'updated_at': datetime.now().isoformat()
+        }
+        
+        response = supabase.table('blog_posts').update(post_data).eq('id', post_id).execute()
+        return jsonify({'success': True, 'post': response.data[0] if response.data else None})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/blog/posts/<post_id>', methods=['DELETE'])
+def delete_blog_post(post_id):
+    """Delete a blog post"""
+    user_profile = get_current_user()
+    if not user_profile:
+        return jsonify({'success': False, 'error': 'Not authenticated'}), 401
+    
+    try:
+        response = supabase.table('blog_posts').delete().eq('id', post_id).execute()
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 @app.route('/ask', methods=['POST'])
 def ask():
     data = request.json
