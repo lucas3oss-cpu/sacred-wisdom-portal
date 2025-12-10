@@ -270,14 +270,14 @@
             const container = document.getElementById('blog-posts-container');
             
             try {
-                // Fetch published posts, ordered by newest first
-                const { data: posts, error } = await supabase
-                    .from('blog_posts')
-                    .select('*')
-                    .eq('published', true)
-                    .order('created_at', { ascending: false });
+                // Fetch posts from Flask API
+                const response = await fetch('/api/blog/posts');
+                const result = await response.json();
 
-                if (error) throw error;
+                if (!result.success) throw new Error(result.error);
+
+                // Filter for published posts only
+                const posts = result.posts.filter(post => post.published);
 
                 if (posts && posts.length > 0) {
                     const postsHTML = `
