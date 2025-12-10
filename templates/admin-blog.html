@@ -442,17 +442,11 @@ Paragraphs are separated by blank lines."></textarea>
             return new Date(dateString).toLocaleDateString('en-US', options);
         }
 
-        // Check authentication
+        // Check authentication - Flask handles this on server side
         async function checkAuth() {
-            const { data: { session } } = await supabase.auth.getSession();
-            
-            if (!session) {
-                window.location.href = '/login';
-                return false;
-            }
-            
-            currentUserId = session.user.id;
-            updateAuthButtons(session);
+            // Just check if we can access the page (Flask session handles auth)
+            // Set a default user ID for blog posts
+            currentUserId = 'flask-user';
             return true;
         }
 
