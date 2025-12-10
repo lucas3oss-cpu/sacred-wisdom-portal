@@ -357,14 +357,14 @@
             const container = document.getElementById('article-content');
             
             try {
-                const { data: post, error } = await supabase
-                    .from('blog_posts')
-                    .select('*')
-                    .eq('slug', slug)
-                    .eq('published', true)
-                    .single();
+                // Fetch all posts from Flask API
+                const response = await fetch('/api/blog/posts');
+                const result = await response.json();
 
-                if (error) throw error;
+                if (!result.success) throw new Error(result.error);
+
+                // Find the post with matching slug
+                const post = result.posts.find(p => p.slug === slug && p.published);
 
                 if (post) {
                     // Update page title
