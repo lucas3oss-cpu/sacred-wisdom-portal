@@ -473,12 +473,12 @@ Paragraphs are separated by blank lines."></textarea>
             const container = document.getElementById('posts-container');
             
             try {
-                const { data: posts, error } = await supabase
-                    .from('blog_posts')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+                const response = await fetch('/api/blog/posts');
+                const result = await response.json();
 
-                if (error) throw error;
+                if (!result.success) throw new Error(result.error);
+
+                const posts = result.posts;
 
                 if (posts && posts.length > 0) {
                     const postsHTML = `
@@ -500,8 +500,8 @@ Paragraphs are separated by blank lines."></textarea>
                                         ${post.published ? `
                                             <a href="/blog/${post.slug}" target="_blank" class="btn btn-secondary">👁️ View</a>
                                         ` : ''}
-                                        <button class="btn btn-secondary" onclick='editPost(${JSON.stringify(post)})'>✏️ Edit</button>
-                                        <button class="btn btn-danger" onclick="deletePost('${post.id}', '${post.title}')">🗑️ Delete</button>
+                                        <button class="btn btn-secondary" onclick='editPost(${JSON.stringify(post).replace(/'/g, "&apos;")})'>✏️ Edit</button>
+                                        <button class="btn btn-danger" onclick="deletePost('${post.id}', '${post.title.replace(/'/g, "&apos;")}')">🗑️ Delete</button>
                                     </div>
                                 </div>
                             `).join('')}
@@ -581,28 +581,34 @@ Paragraphs are separated by blank lines."></textarea>
                 excerpt: document.getElementById('post-excerpt').value,
                 content: document.getElementById('post-content').value,
                 cover_image: document.getElementById('post-cover').value || null,
-                published: document.getElementById('post-published').checked,
-                author_id: currentUserId,
-                author_name: 'Luke',
-                updated_at: new Date().toISOString()
+                published: document.getElementById('post-published').checked
             };
 
             try {
-                let result;
+                let response;
                 if (postId) {
                     // Update existing post
-                    result = await supabase
-                        .from('blog_posts')
-                        .update(postData)
-                        .eq('id', postId);
+                    response = await fetch(`/api/blog/posts/${postId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(postData)
+                    });
                 } else {
                     // Create new post
-                    result = await supabase
-                        .from('blog_posts')
-                        .insert([postData]);
+                    response = await fetch('/api/blog/posts', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(postData)
+                    });
                 }
 
-                if (result.error) throw result.error;
+                const result = await response.json();
+
+                if (!result.success) throw new Error(result.error);
 
                 closeEditor();
                 loadPosts();
@@ -620,12 +626,13 @@ Paragraphs are separated by blank lines."></textarea>
             }
 
             try {
-                const { error } = await supabase
-                    .from('blog_posts')
-                    .delete()
-                    .eq('id', postId);
+                const response = await fetch(`/api/blog/posts/${postId}`, {
+                    method: 'DELETE'
+                });
 
-                if (error) throw error;
+                const result = await response.json();
+
+                if (!result.success) throw new Error(result.error);
 
                 loadPosts();
                 alert('Post deleted successfully!');
