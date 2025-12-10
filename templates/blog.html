@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - My Soul Compass</title>
+    <title id="page-title">Blog Post - My Soul Compass</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -68,111 +68,180 @@
             color: #d4a574;
         }
 
-        .nav-links a.active {
-            color: #d4a574;
-            font-weight: 600;
-        }
-
-        /* Blog Header */
-        .blog-header {
-            text-align: center;
-            padding: 4rem 2rem 2rem;
+        /* Article Container */
+        .article-container {
             max-width: 800px;
             margin: 0 auto;
+            padding: 2rem;
         }
 
-        .blog-header h1 {
-            font-size: 3rem;
+        /* Back Button */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #d4a574;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s;
+        }
+
+        .back-button:hover {
+            gap: 0.25rem;
+        }
+
+        /* Article Header */
+        .article-header {
+            margin-bottom: 2rem;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
             background: linear-gradient(135deg, #d4a574 0%, #e9c9e3 50%, #a78bfa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 1rem;
+            line-height: 1.2;
         }
 
-        .blog-header p {
-            font-size: 1.2rem;
-            color: #b0b0b0;
-            font-style: italic;
-        }
-
-        /* Blog Posts Grid */
-        .blog-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .blog-posts {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .blog-post-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 165, 116, 0.2);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-        }
-
-        .blog-post-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.2);
-        }
-
-        .post-cover {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: linear-gradient(135deg, #d4a574 0%, #e9c9e3 50%, #a78bfa 100%);
-        }
-
-        .post-content {
-            padding: 1.5rem;
-        }
-
-        .post-meta {
+        .article-meta {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            font-size: 0.85rem;
+            gap: 2rem;
             color: #888;
+            font-size: 0.95rem;
         }
 
-        .post-author {
-            color: #d4a574;
-        }
-
-        .post-title {
-            font-size: 1.5rem;
-            color: #e0e0e0;
-            margin-bottom: 0.75rem;
-            line-height: 1.4;
-        }
-
-        .post-excerpt {
-            color: #b0b0b0;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .read-more {
-            color: #d4a574;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
+        .article-meta span {
+            display: flex;
             align-items: center;
             gap: 0.5rem;
-            transition: gap 0.3s;
         }
 
-        .read-more:hover {
-            gap: 0.75rem;
+        .author {
+            color: #d4a574;
+        }
+
+        /* Cover Image */
+        .article-cover {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        /* Article Content */
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e0e0e0;
+        }
+
+        .article-content h2 {
+            color: #d4a574;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .article-content h3 {
+            color: #e9c9e3;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.4rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid #d4a574;
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: #b0b0b0;
+        }
+
+        .article-content a {
+            color: #a78bfa;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .article-content a:hover {
+            border-bottom-color: #a78bfa;
+        }
+
+        .article-content code {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        .article-content pre {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+            border: 1px solid rgba(212, 165, 116, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .cta-section h3 {
+            font-size: 1.8rem;
+            color: #d4a574;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: #b0b0b0;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #d4a574 0%, #e9c9e3 50%, #a78bfa 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.3);
         }
 
         /* Loading State */
@@ -183,33 +252,39 @@
             color: #888;
         }
 
-        /* Empty State */
-        .empty-state {
+        /* Error State */
+        .error-state {
             text-align: center;
             padding: 4rem 2rem;
             max-width: 600px;
             margin: 0 auto;
         }
 
-        .empty-state h2 {
+        .error-state h2 {
             font-size: 2rem;
             color: #d4a574;
             margin-bottom: 1rem;
         }
 
-        .empty-state p {
+        .error-state p {
             color: #888;
             font-size: 1.1rem;
+            margin-bottom: 2rem;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .blog-header h1 {
-                font-size: 2rem;
+            .article-title {
+                font-size: 1.8rem;
             }
 
-            .blog-posts {
-                grid-template-columns: 1fr;
+            .article-content {
+                font-size: 1rem;
+            }
+
+            .article-meta {
+                flex-direction: column;
+                gap: 0.5rem;
             }
 
             nav {
@@ -233,22 +308,16 @@
         </a>
         <div class="nav-links">
             <a href="/">Home</a>
-            <a href="/blog" class="active">Blog</a>
+            <a href="/blog">Blog</a>
             <a href="/affiliate">Affiliate</a>
             <div id="auth-buttons"></div>
         </div>
     </nav>
 
-    <!-- Blog Header -->
-    <div class="blog-header">
-        <h1>Spiritual Insights & Wisdom</h1>
-        <p>Exploring consciousness, spirituality, and the journey within</p>
-    </div>
-
-    <!-- Blog Posts Container -->
-    <div class="blog-container">
-        <div id="blog-posts-container">
-            <div class="loading">Loading posts...</div>
+    <!-- Article Container -->
+    <div class="article-container">
+        <div id="article-content">
+            <div class="loading">Loading post...</div>
         </div>
     </div>
 
@@ -259,66 +328,88 @@
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // Get slug from URL
+        function getSlugFromURL() {
+            const path = window.location.pathname;
+            const parts = path.split('/');
+            return parts[parts.length - 1];
+        }
+
         // Format date
         function formatDate(dateString) {
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             return new Date(dateString).toLocaleDateString('en-US', options);
         }
 
-        // Load blog posts
-        async function loadBlogPosts() {
-            const container = document.getElementById('blog-posts-container');
+        // Convert markdown-style content to HTML
+        function convertToHTML(content) {
+            // Simple markdown-to-HTML conversion
+            return content
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+        }
+
+        // Load blog post
+        async function loadBlogPost() {
+            const slug = getSlugFromURL();
+            const container = document.getElementById('article-content');
             
             try {
-                // Fetch posts from Flask API
+                // Fetch all posts from Flask API
                 const response = await fetch('/api/blog/posts');
                 const result = await response.json();
 
                 if (!result.success) throw new Error(result.error);
 
-                // Filter for published posts only
-                const posts = result.posts.filter(post => post.published);
+                // Find the post with matching slug
+                const post = result.posts.find(p => p.slug === slug && p.published);
 
-                if (posts && posts.length > 0) {
-                    const postsHTML = `
-                        <div class="blog-posts">
-                            ${posts.map(post => `
-                                <div class="blog-post-card" onclick="window.location.href='/blog/${post.slug}'">
-                                    ${post.cover_image ? `
-                                        <img src="${post.cover_image}" alt="${post.title}" class="post-cover">
-                                    ` : `
-                                        <div class="post-cover"></div>
-                                    `}
-                                    <div class="post-content">
-                                        <div class="post-meta">
-                                            <span class="post-author">${post.author_name || 'Luke'}</span>
-                                            <span class="post-date">${formatDate(post.created_at)}</span>
-                                        </div>
-                                        <h2 class="post-title">${post.title}</h2>
-                                        <p class="post-excerpt">${post.excerpt || ''}</p>
-                                        <a href="/blog/${post.slug}" class="read-more">
-                                            Read More →
-                                        </a>
-                                    </div>
+                if (post) {
+                    // Update page title
+                    document.getElementById('page-title').textContent = `${post.title} - My Soul Compass`;
+
+                    // Render post
+                    const articleHTML = `
+                        <a href="/blog" class="back-button">← Back to Blog</a>
+                        
+                        <article>
+                            <div class="article-header">
+                                <h1 class="article-title">${post.title}</h1>
+                                <div class="article-meta">
+                                    <span class="author">👤 ${post.author_name || 'Luke'}</span>
+                                    <span>📅 ${formatDate(post.created_at)}</span>
                                 </div>
-                            `).join('')}
+                            </div>
+
+                            ${post.cover_image ? `
+                                <img src="${post.cover_image}" alt="${post.title}" class="article-cover">
+                            ` : ''}
+
+                            <div class="article-content">
+                                <p>${convertToHTML(post.content)}</p>
+                            </div>
+                        </article>
+
+                        <div class="cta-section">
+                            <h3>Experience My Soul Compass</h3>
+                            <p>Get daily spiritual wisdom from Alan Watts, Carl Jung, Rudolf Steiner, and more.</p>
+                            <a href="/" class="cta-button">Try It Free</a>
                         </div>
                     `;
-                    container.innerHTML = postsHTML;
+
+                    container.innerHTML = articleHTML;
                 } else {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <h2>No Posts Yet</h2>
-                            <p>Check back soon for spiritual insights and wisdom!</p>
-                        </div>
-                    `;
+                    throw new Error('Post not found');
                 }
             } catch (error) {
-                console.error('Error loading posts:', error);
+                console.error('Error loading post:', error);
                 container.innerHTML = `
-                    <div class="empty-state">
-                        <h2>Unable to Load Posts</h2>
-                        <p>Please try again later.</p>
+                    <div class="error-state">
+                        <h2>Post Not Found</h2>
+                        <p>The blog post you're looking for doesn't exist or has been removed.</p>
+                        <a href="/blog" class="cta-button">Back to Blog</a>
                     </div>
                 `;
             }
@@ -358,7 +449,7 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            loadBlogPosts();
+            loadBlogPost();
             updateAuthButtons();
         });
     </script>
