@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_cors import CORS
 from supabase import create_client, Client
 from datetime import datetime
@@ -38,13 +38,13 @@ def signup():
 @app.route('/blog')
 @app.route('/blog.html')
 def blog():
-    return send_from_directory('.', 'blog.html')
+    return render_template('blog.html')
 
 # Individual blog post page
 @app.route('/blog-post')
 @app.route('/blog-post.html')
 def blog_post_page():
-    return send_from_directory('.', 'blog-post.html')
+    return render_template('blog-post.html')
 
 # Admin blog management page
 @app.route('/admin/blog')
