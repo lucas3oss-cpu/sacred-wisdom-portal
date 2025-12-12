@@ -1,12 +1,23 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
+from flask_cors import CORS
+from supabase import create_client, Client
+from datetime import datetime
 import anthropic
 import os
 
 app = Flask(__name__)
+CORS(app)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'your-secret-key-here')
 
 # Anthropic API setup
 client = anthropic.Anthropic(api_key=os.environ.get('ANTHROPIC_API_KEY'))
+
+# Supabase setup
+SUPABASE_URL = os.environ.get('SUPABASE_URL')
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+# ============ EXISTING ROUTES ============
 
 # Home page
 @app.route('/')
@@ -25,13 +36,15 @@ def signup():
 
 # Blog listing page
 @app.route('/blog')
+@app.route('/blog.html')
 def blog():
-    return render_template('blog.html')
+    return send_from_directory('.', 'blog.html')
 
 # Individual blog post page
-@app.route('/blog/<slug>')
-def blog_post(slug):
-    return render_template('blog-post.html')
+@app.route('/blog-post')
+@app.route('/blog-post.html')
+def blog_post_page():
+    return send_from_directory('.', 'blog-post.html')
 
 # Admin blog management page
 @app.route('/admin/blog')
@@ -87,6 +100,112 @@ def chat():
             'teacher': selected_teacher
         })
         
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# ============ BLOG API ROUTES (NEW) ============
+
+@app.route('/api/blog/posts', methods=['GET'])
+def get_posts():
+    """Get all published blog posts"""
+    try:
+        response = supabase.table('blog_posts')\
+            .select('*')\
+            .eq('status', 'published')\
+            .order('created_at', desc=True)\
+            .execute()
+        
+        return jsonify(response.data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/blog/posts/<int:post_id>', methods=['GET'])
+def get_post(post_id):
+    """Get a single blog post by ID"""
+    try:
+        response = supabase.table('blog_posts')\
+            .select('*')\
+            .eq('id', post_id)\
+            .eq('status', 'published')\
+            .single()\
+            .execute()
+        
+        return jsonify(response.data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 404
+
+@app.route('/api/blog/admin/posts', methods=['POST'])
+def create_post():
+    """Create a new blog post (admin only)"""
+    try:
+        data = request.json
+        
+        post_data = {
+            'title': data['title'],
+            'content': data['content'],
+            'excerpt': data.get('excerpt', ''),
+            'category': data['category'],
+            'author': data['author'],
+            'status': data.get('status', 'draft'),
+            'created_at': datetime.utcnow().isoformat()
+        }
+        
+        response = supabase.table('blog_posts').insert(post_data).execute()
+        return jsonify(response.data[0]), 201
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/blog/admin/posts/<int:post_id>', methods=['PUT'])
+def update_post(post_id):
+    """Update an existing blog post (admin only)"""
+    try:
+        data = request.json
+        
+        update_data = {
+            'title': data['title'],
+            'content': data['content'],
+            'excerpt': data.get('excerpt', ''),
+            'category': data['category'],
+            'author': data['author'],
+            'status': data.get('status', 'draft'),
+            'updated_at': datetime.utcnow().isoformat()
+        }
+        
+        response = supabase.table('blog_posts')\
+            .update(update_data)\
+            .eq('id', post_id)\
+            .execute()
+        
+        return jsonify(response.data[0])
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/blog/admin/posts/<int:post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    """Delete a blog post (admin only)"""
+    try:
+        response = supabase.table('blog_posts')\
+            .delete()\
+            .eq('id', post_id)\
+            .execute()
+        
+        return jsonify({'message': 'Post deleted successfully'})
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/blog/admin/posts', methods=['GET'])
+def get_all_posts_admin():
+    """Get all blog posts including drafts (admin only)"""
+    try:
+        response = supabase.table('blog_posts')\
+            .select('*')\
+            .order('created_at', desc=True)\
+            .execute()
+        
+        return jsonify(response.data)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
